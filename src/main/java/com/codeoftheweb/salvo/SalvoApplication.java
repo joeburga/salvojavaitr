@@ -17,7 +17,9 @@ public class SalvoApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository) {
+	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository,
+									  GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository,
+									  ShipLocationRepository shipLocationRepository) {
 		return (args) -> {
 
 			Player player1 = new Player("player1@gmail.com");
@@ -57,16 +59,19 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gamePlayer3);
 			gamePlayerRepository.save(gamePlayer4);
 
+
+			List<String> shipLocation = new ArrayList<>();
+			shipLocation.add("H1");
+			shipLocation.add("H1");
+			shipLocation.add("H1");
+
 			Ship ship1 = new Ship("destroyer",gamePlayer1);
 			Ship ship2 = new Ship("patrol boat",gamePlayer2);
 			Ship ship3 = new Ship("cruiser",gamePlayer3);
 			Ship ship4 = new Ship("random",gamePlayer4);
 
 
-			List<String> shipLocation = new ArrayList<>();
-			shipLocation.add("H1");
-			shipLocation.add("H1");
-			shipLocation.add("H1");
+
 
 
 			shipRepository.save(ship1);

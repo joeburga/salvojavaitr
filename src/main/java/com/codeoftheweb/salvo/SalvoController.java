@@ -82,6 +82,7 @@ public class SalvoController {
         dto.put("id", game.getId());
         dto.put("creationDate", game.getDate());
         dto.put("gamePlayers",makeGamePlayersListaDTO(game.getGamePlayers()));
+        dto.put("ships", getGameView(game.getId()));
 
         return dto;
     }
@@ -132,7 +133,22 @@ public class SalvoController {
 
     private Map<String,Object> gameViewDTO(GamePlayer gamePlayer) {
         Map<String,Object> dto = new LinkedHashMap<>();
-        dto.put("id",gamePlayer.getGame().getId());
+        dto.put("ships",makeShipsListaDTO(gamePlayer.getShips()));
+
+        return dto;
+    }
+    //Itero sobre la lista anterior
+    public List<Object> makeShipsListaDTO(Set<Ship> ships) {
+        return ships
+                .stream()
+                .map(ship -> makeShipsDTO(ship))
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, Object> makeShipsDTO(Ship ship) {
+
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("type", ship.getType());
 
         return dto;
     }

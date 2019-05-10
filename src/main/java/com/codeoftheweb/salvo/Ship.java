@@ -3,6 +3,8 @@ package com.codeoftheweb.salvo;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Ship {
@@ -16,12 +18,15 @@ public class Ship {
     @JoinColumn(name="gamePlayer_id")
     private GamePlayer gamePlayer;
 
+ /*   @OneToMany(mappedBy="shipLocations", fetch=FetchType.EAGER)
+    private Set<ShipLocation> shipLocations;*/
 
     public Ship(){};
 
     public Ship(String tipo, GamePlayer gamePlayer) {
-        this.setType(tipo);
+        this.type = tipo;
         this.gamePlayer = gamePlayer;
+
     }
 
     public long getId() {
@@ -49,4 +54,11 @@ public class Ship {
     }
 
 
+/*    public Set<ShipLocation> getShipLocations() {
+        return shipLocations;
+    }
+
+    public void setShipLocations(Set<ShipLocation> shipLocations) {
+        this.shipLocations = shipLocations;
+    }*/
 }
