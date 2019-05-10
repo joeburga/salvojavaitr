@@ -60,38 +60,38 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gamePlayer4);
 
 
-			List<String> Salvo1 = new ArrayList<>();
-			Salvo1.add("B5");
-			Salvo1.add("B6");
-			Salvo1.add("B7");
-			Salvo1.add("B8");
-			Salvo1.add("B9");
+			List<String> shipLocation1 = new ArrayList<>();
+			shipLocation1.add("B5");
+			shipLocation1.add("B6");
+			shipLocation1.add("B7");
+			shipLocation1.add("B8");
+			shipLocation1.add("B9");
 
-			List<String> Salvo2 = new ArrayList<>();
-			Salvo2.add("F3");
-			Salvo2.add("G3");
-			Salvo2.add("H3");
+			List<String> shipLocation2 = new ArrayList<>();
+			shipLocation2.add("F3");
+			shipLocation2.add("G3");
+			shipLocation2.add("H3");
 
-			List<String> Salvo3 = new ArrayList<>();
-			Salvo3.add("I5");
-			Salvo3.add("I6");
-			Salvo3.add("I7");
-			Salvo3.add("I8");
-			Salvo3.add("I9");
+			List<String> shipLocation3 = new ArrayList<>();
+			shipLocation3.add("I5");
+			shipLocation3.add("I6");
+			shipLocation3.add("I7");
+			shipLocation3.add("I8");
+			shipLocation3.add("I9");
 
-			List<String> Salvo4 = new ArrayList<>();
-			Salvo4.add("A3");
-			Salvo4.add("B3");
-			Salvo4.add("C3");
+			List<String> shipLocation4 = new ArrayList<>();
+			shipLocation4.add("A3");
+			shipLocation4.add("B3");
+			shipLocation4.add("C3");
 
-			Ship ship1 = new Ship("destroyer",gamePlayer1,Salvo1);
-			Ship ship2 = new Ship("patrol boat",gamePlayer2,Salvo2);
-			Ship ship3 = new Ship("cruiser",gamePlayer3,Salvo3);
-			Ship ship4 = new Ship("random",gamePlayer4,Salvo4);
+			Ship ship1 = new Ship("destroyer",gamePlayer1,shipLocation1);
+			Ship ship2 = new Ship("patrol boat",gamePlayer2,shipLocation2);
+			Ship ship3 = new Ship("cruiser",gamePlayer3,shipLocation3);
+			Ship ship4 = new Ship("random",gamePlayer4,shipLocation4);
 
-			Ship ship5 = new Ship("thanos",gamePlayer1,Salvo2);
-			Ship ship6 = new Ship("thor",gamePlayer2,Salvo1);
-			
+			Ship ship5 = new Ship("thanos",gamePlayer1,shipLocation2);
+			Ship ship6 = new Ship("thor",gamePlayer2,shipLocation1);
+
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);
@@ -99,9 +99,29 @@ public class SalvoApplication {
 			shipRepository.save(ship5);
 			shipRepository.save(ship6);
 
-			Salvo salvo1 = new Salvo(gamePlayer1,2,Salvo1);
-			
+			List<String> salvoLocation1 = new ArrayList<>();
+			salvoLocation1.add("H1");
+			salvoLocation1.add("A2");
+
+			List<String> salvoLocation2 = new ArrayList<>();
+			salvoLocation2.add("C5");
+			salvoLocation2.add("E6");
+
+			List<String> salvoLocation3 = new ArrayList<>();
+			salvoLocation3.add("B4");
+			salvoLocation3.add("D8");
+
+
+			Salvo salvo1 = new Salvo(gamePlayer1,1,salvoLocation1);
+			Salvo salvo2 = new Salvo(gamePlayer1,2,salvoLocation2);
+			Salvo salvo3 = new Salvo(gamePlayer1,3,salvoLocation3);
+
+
 			salvoRepository.save(salvo1);
+			salvoRepository.save(salvo2);
+			salvoRepository.save(salvo3);
+
+
 		};
 	}
 

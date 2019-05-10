@@ -6,8 +6,6 @@ import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Salvo {
@@ -20,7 +18,7 @@ public class Salvo {
     @JoinColumn(name="gamePlayer_id")
     private GamePlayer gamePlayer;
 
-    private  int turnNumber;
+    private int turn;
 
     @ElementCollection
     @Column(name="shipLocation_id")
@@ -28,9 +26,9 @@ public class Salvo {
 
     public Salvo(){};
 
-    public  Salvo(GamePlayer gamePlayer,int number, List<String> locations){
+    public  Salvo(GamePlayer gamePlayer, int turn, List<String> locations){
         this.gamePlayer = gamePlayer;
-        this.turnNumber = number;
+        this.turn = turn;
         this.locations = locations;
     }
 
@@ -50,19 +48,20 @@ public class Salvo {
         this.gamePlayer = gamePlayer;
     }
 
-    public int getTurnNumber() {
-        return turnNumber;
-    }
-
-    public void setTurnNumber(int turnNumber) {
-        this.turnNumber = turnNumber;
-    }
-
     public List<String> getLocations() {
         return locations;
     }
 
     public void setLocations(List<String> locations) {
         this.locations = locations;
+    }
+
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
 }

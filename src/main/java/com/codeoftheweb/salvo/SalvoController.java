@@ -137,7 +137,7 @@ public class SalvoController {
         // luego desde el game traig los gamePlayers.
         dto.put("gamePlayers",makeGamePlayersListaDTO(gamePlayer.getGame().getGamePlayers()));
         dto.put("ships",gamePlayer.getShips()); //makeShipsListaDTO(gamePlayer.getShips()
-        dto.put("salvoes", gamePlayer.getSalvoes());
+        //dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().map(gamePlayer1 -> gamePlayer1.getSalvoes()).); //hace dto
         return dto;
     }
 
