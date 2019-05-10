@@ -82,7 +82,7 @@ public class SalvoController {
         dto.put("id", game.getId());
         dto.put("creationDate", game.getDate());
         dto.put("gamePlayers",makeGamePlayersListaDTO(game.getGamePlayers()));
-        dto.put("ships", getGameView(game.getId()));
+        //dto.put("ships", getGameView(game.getId()));
 
         return dto;
     }
@@ -111,8 +111,6 @@ public class SalvoController {
         return dto;
     }
 
-
-
     // Para que me muestre id-player y emails de los players, cambiar nombre makeGamePlayerDTO por makePlayerDTO
     // y el GamePlayerRepository por PlayerRepository
 /*        private Map<String, Object> makePlayerDTO(Player player) {
@@ -133,6 +131,18 @@ public class SalvoController {
 
     private Map<String,Object> gameViewDTO(GamePlayer gamePlayer) {
         Map<String,Object> dto = new LinkedHashMap<>();
+        dto.put("id", gamePlayer.getGame().getId());
+        dto.put("created", gamePlayer.getGame().getDate());
+        //estoy en un gameplayer luiego getgame para ir al juego donde estoy,
+        // luego desde el game traig los gamePlayers.
+        dto.put("gamePlayers",makeGamePlayersListaDTO(gamePlayer.getGame().getGamePlayers()));
+        dto.put("ships",gamePlayer.getShips()); //makeShipsListaDTO(gamePlayer.getShips()
+        dto.put("salvoes", gamePlayer.getSalvoes());
+        return dto;
+    }
+
+/*    private Map<String,Object> gameViewDTO(GamePlayer gamePlayer) {
+        Map<String,Object> dto = new LinkedHashMap<>();
         dto.put("ships",makeShipsListaDTO(gamePlayer.getShips()));
 
         return dto;
@@ -152,4 +162,5 @@ public class SalvoController {
 
         return dto;
     }
+ */
 }
