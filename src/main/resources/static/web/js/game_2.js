@@ -29,6 +29,7 @@ function loadData() {
         });
       });
       data.salvoes.forEach(function (salvo) {
+          console.log(salvo);
         if (playerInfo[0].id === salvo.player) {
           salvo.locations.forEach(function (location) {
             $('#S_' + location).addClass('salvo');

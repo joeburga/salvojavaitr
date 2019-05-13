@@ -137,11 +137,23 @@ public class SalvoController {
         // luego desde el game traig los gamePlayers.
         dto.put("gamePlayers",makeGamePlayersListaDTO(gamePlayer.getGame().getGamePlayers()));
         dto.put("ships",gamePlayer.getShips()); //makeShipsListaDTO(gamePlayer.getShips()
-        dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().map(gamePlayer1 -> makeSalvoesListaDTO(gamePlayer1.getSalvoes()))); //hace dto
+        dto.put("salvoes", makeListGames(gamePlayer.getGame()));
+        //gamePlayer.getGame().getGamePlayers().stream().map(gamePlayer1 -> makeSalvoesListaDTO(gamePlayer1.getSalvoes()))
         return dto;
     }
 
-    public List<Object> makeSalvoesListaDTO(Set<Salvo> salvoes) {
+    private List<Map<String, Object>> makeListGames(Game game) {
+
+        List<Map<String, Object>> dto = new ArrayList<>();
+
+        game.getGamePlayers().forEach(gamePlayer -> dto.addAll(makeSalvoesListaDTO(gamePlayer.getSalvoes())));
+
+        return dto;
+    }
+
+    //Desde game necesito todos los gameplayers, y desde gameplayer necesito todos los salvoes
+    //Lista de mapas.
+    public List<Map<String, Object>> makeSalvoesListaDTO(Set<Salvo> salvoes) {
         return salvoes
                 .stream()
                 .map(salvo -> makeSalvoDTO(salvo))
@@ -158,26 +170,20 @@ public class SalvoController {
         return dto;
     }
 
-/*    private Map<String,Object> gameViewDTO(GamePlayer gamePlayer) {
-        Map<String,Object> dto = new LinkedHashMap<>();
-        dto.put("ships",makeShipsListaDTO(gamePlayer.getShips()));
-
-        return dto;
-    }
-    //Itero sobre la lista anterior
-    public List<Object> makeShipsListaDTO(Set<Ship> ships) {
-        return ships
+/*    public List<Object> makeSalvoesListaDTO(Set<Salvo> salvoes) {
+        return salvoes
                 .stream()
-                .map(ship -> makeShipsDTO(ship))
+                .map(salvo -> makeSalvoDTO(salvo))
                 .collect(Collectors.toList());
     }
 
-    private Map<String, Object> makeShipsDTO(Ship ship) {
+    private Map<String, Object> makeSalvoDTO(Salvo salvo) {
 
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("type", ship.getType());
+        dto.put("turn", salvo.getTurn());
+        dto.put("player", salvo.getGamePlayer().getId());
+        dto.put("locations", salvo.getLocations());
 
         return dto;
-    }
- */
+    }*/
 }

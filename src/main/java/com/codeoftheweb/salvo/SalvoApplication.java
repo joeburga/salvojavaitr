@@ -162,13 +162,13 @@ public class SalvoApplication {
 			salvoLocation10.add("H3");
 
 			Salvo salvo1 = new Salvo(gamePlayer1,1,salvoLocation1);
-			Salvo salvo2 = new Salvo(gamePlayer1,1,salvoLocation6);
-			Salvo salvo3 = new Salvo(gamePlayer3,2,salvoLocation2);
-			Salvo salvo4 = new Salvo(gamePlayer3,2,salvoLocation7);
+			Salvo salvo2 = new Salvo(gamePlayer2,1,salvoLocation6);
+			Salvo salvo3 = new Salvo(gamePlayer1,2,salvoLocation2);
+			Salvo salvo4 = new Salvo(gamePlayer2,2,salvoLocation7);
 			Salvo salvo5 = new Salvo(gamePlayer3,1,salvoLocation3);
 			Salvo salvo6 = new Salvo(gamePlayer3,1,salvoLocation8);
-			Salvo salvo7 = new Salvo(gamePlayer3,2,salvoLocation4);
-			Salvo salvo8 = new Salvo(gamePlayer3,2,salvoLocation9);
+			Salvo salvo7 = new Salvo(gamePlayer4,2,salvoLocation4);
+			Salvo salvo8 = new Salvo(gamePlayer4,2,salvoLocation9);
 
 
 			salvoRepository.save(salvo1);
