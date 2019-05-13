@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -21,7 +22,7 @@ public class Salvo {
     private int turn;
 
     @ElementCollection
-    @Column(name="shipLocation_id")
+    @Column(name="salvoLocation_id")
     private List<String> locations = new ArrayList<>();
 
     public Salvo(){};
@@ -40,6 +41,7 @@ public class Salvo {
         this.id = id;
     }
 
+    @JsonIgnore
     public GamePlayer getGamePlayer() {
         return gamePlayer;
     }

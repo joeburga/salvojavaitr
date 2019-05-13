@@ -24,6 +24,13 @@ function loadData(){
 
                 })
             });
+
+/*            data.salvoes.forEach(function(salvoPiece){
+                salvoPiece.locations.forEach(function(salvoLocation){
+                    $('#'+salvoLocation).addClass('salvo');
+
+                })
+            });*/
         })
         .fail(function( jqXHR, textStatus ) {
           alert( "Failed: " + textStatus );

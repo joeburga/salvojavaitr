@@ -137,7 +137,24 @@ public class SalvoController {
         // luego desde el game traig los gamePlayers.
         dto.put("gamePlayers",makeGamePlayersListaDTO(gamePlayer.getGame().getGamePlayers()));
         dto.put("ships",gamePlayer.getShips()); //makeShipsListaDTO(gamePlayer.getShips()
-        //dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().map(gamePlayer1 -> gamePlayer1.getSalvoes()).); //hace dto
+        dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().map(gamePlayer1 -> makeSalvoesListaDTO(gamePlayer1.getSalvoes()))); //hace dto
+        return dto;
+    }
+
+    public List<Object> makeSalvoesListaDTO(Set<Salvo> salvoes) {
+        return salvoes
+                .stream()
+                .map(salvo -> makeSalvoDTO(salvo))
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, Object> makeSalvoDTO(Salvo salvo) {
+
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("turn", salvo.getTurn());
+        dto.put("player", salvo.getGamePlayer().getId());
+        dto.put("locations", salvo.getLocations());
+
         return dto;
     }
 

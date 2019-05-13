@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-public class GamePlayer {
+public class Score {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -21,17 +21,17 @@ public class GamePlayer {
     @JoinColumn(name="game_id")
     private Game game;
 
-    @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
-    private Set<Ship> ships;
+    private Date finishDate = new Date();
+    private int score;
 
-    @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
-    private Set<Salvo> salvoes;
 
-    public GamePlayer() { }
+    public Score() { }
 
-    public GamePlayer(Game game, Player player) {
+    public Score(Game game, Player player, int score, Date finishDate) {
         this.game = game;
         this.player = player;
+        this.score = score;
+        this.finishDate = finishDate;
     }
 
     public Player getPlayer() {
@@ -58,20 +58,19 @@ public class GamePlayer {
         return id;
     }
 
-    public Set<Ship> getShips() {
-        return ships;
+    public Date getFinishDate() {
+        return finishDate;
     }
 
-    public void setShips(Set<Ship> ships) {
-        this.ships = ships;
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
     }
 
-    public Set<Salvo> getSalvoes() {
-        return salvoes;
+    public int getScore() {
+        return score;
     }
 
-    public void setSalvoes(Set<Salvo> salvoes) {
-        this.salvoes = salvoes;
+    public void setScore(int score) {
+        this.score = score;
     }
-
 }
