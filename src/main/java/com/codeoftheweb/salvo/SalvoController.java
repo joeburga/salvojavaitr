@@ -82,7 +82,8 @@ public class SalvoController {
         dto.put("id", game.getId());
         dto.put("creationDate", game.getDate());
         dto.put("gamePlayers",makeGamePlayersListaDTO(game.getGamePlayers()));
-        //dto.put("ships", getGameView(game.getId()));
+        //Task 5
+        dto.put("scores", makeListGamesScores(game.getScores()));
 
         return dto;
     }
@@ -107,7 +108,50 @@ public class SalvoController {
     public Map<String, Object> makePlayerDTO(Player player) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
-        dto.put("email", player.getUserName());
+        dto.put("email", player.getEmail());
+        //Task 5
+        dto.put("score", makeScoresList(player));
+        return dto;
+    }
+
+    //Task 5
+    public List<Object> makeListGamesScores(Set<Score> scores) {
+        return scores
+                .stream()
+                .map(score -> makeScoreDTO(score))
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, Object> makeScoreDTO(Score score) {
+
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("player", score.getPlayer().getId());
+        dto.put("score", score.getScore());
+        dto.put("finishDate", score.getFinishDate());
+
+        return dto;
+    }
+
+    @Autowired
+    private PlayerRepository playerRepository;
+
+    @RequestMapping("/leaderBoard")
+    public List<Object> makeLeaderBoard() {
+        return playerRepository
+                .findAll()
+                .stream()
+                .map(player -> makePlayerDTO(player))
+                .collect(Collectors.toList());
+    }
+
+    public Map<String, Object> makeScoresList(Player player) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("name", player.getUserName());
+        dto.put("total", player.getScore(player));
+        dto.put("won", player.getWins(player.getScores()));
+        dto.put("lost", player.getLosses(player.getScores()));
+        dto.put("tied", player.getDraws(player.getScores()));
+
         return dto;
     }
 
@@ -139,6 +183,8 @@ public class SalvoController {
         dto.put("ships",gamePlayer.getShips()); //makeShipsListaDTO(gamePlayer.getShips()
         dto.put("salvoes", makeListGames(gamePlayer.getGame()));
         //gamePlayer.getGame().getGamePlayers().stream().map(gamePlayer1 -> makeSalvoesListaDTO(gamePlayer1.getSalvoes()))
+        dto.put("scores", makeListGamesScores(gamePlayer.getGame().getScores()));
+
         return dto;
     }
 

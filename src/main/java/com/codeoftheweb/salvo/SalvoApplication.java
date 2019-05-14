@@ -58,6 +58,8 @@ public class SalvoApplication {
 			GamePlayer gamePlayer6 = new GamePlayer(game3,player4);
 			GamePlayer gamePlayer7 = new GamePlayer(game4,player2);
 			GamePlayer gamePlayer8 = new GamePlayer(game4,player1);
+			GamePlayer gamePlayer9 = new GamePlayer(game2,player4);
+			GamePlayer gamePlayer10 = new GamePlayer(game2,player1);
 
 			gamePlayerRepository.save(gamePlayer1);
 			gamePlayerRepository.save(gamePlayer2);
@@ -67,6 +69,9 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gamePlayer6);
 			gamePlayerRepository.save(gamePlayer7);
 			gamePlayerRepository.save(gamePlayer8);
+			gamePlayerRepository.save(gamePlayer9);
+			gamePlayerRepository.save(gamePlayer10);
+
 
 
 			List<String> shipLocation1 = new ArrayList<>();
@@ -180,14 +185,22 @@ public class SalvoApplication {
 			salvoRepository.save(salvo7);
 			salvoRepository.save(salvo8);
 
-			Score score1 = new Score(game1,player1,2,date1);
-			Score score2 = new Score(game2,player2,4,date3);
-			Score score3 = new Score(game1,player3,3,date2);
+			Score score1 = new Score(game1,player1,1,date4);
+			Score score2 = new Score(game1,player2,1,date1);
+			Score score3 = new Score(game2,player3,1,date2);
+            Score score4 = new Score(game2,player2, (float)0.5,date2);
+            Score score5 = new Score(game3,player3,0,date2);
+            Score score6 = new Score(game3,player1,1,date2);
 
-			scoreRepository.save(score1);
+
+            scoreRepository.save(score1);
 			scoreRepository.save(score2);
 			scoreRepository.save(score3);
-		};
+            scoreRepository.save(score4);
+            scoreRepository.save(score5);
+            scoreRepository.save(score6);
+
+        };
 	}
 
 }

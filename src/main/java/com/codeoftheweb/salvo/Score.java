@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -22,12 +23,12 @@ public class Score {
     private Game game;
 
     private Date finishDate = new Date();
-    private int score;
+    private float score;
 
 
     public Score() { }
 
-    public Score(Game game, Player player, int score, Date finishDate) {
+    public Score(Game game, Player player, float score, Date finishDate) {
         this.game = game;
         this.player = player;
         this.score = score;
@@ -66,11 +67,12 @@ public class Score {
         this.finishDate = finishDate;
     }
 
-    public int getScore() {
+    public float getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(float score) {
         this.score = score;
     }
+
 }

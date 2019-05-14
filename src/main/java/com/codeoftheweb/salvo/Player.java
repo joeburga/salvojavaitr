@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import static java.util.stream.Collectors.toList;
@@ -16,7 +17,7 @@ public class Player {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private String userName;
-    private String name;
+    private String mail;
     private String password;
 
     //Mapea la columna player
@@ -24,13 +25,13 @@ public class Player {
     private Set<GamePlayer> gamePlayers;
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
-    private Set<Score> scores;
+    private List<Score> scores;
 
     public Player() { }
 
-    public Player(String user, String name, String password) {
-        this.userName = user;
-        this.name = name;
+    public Player(String userName, String mail, String password) {
+        this.userName = userName;
+        this.mail = mail;
         this.password = password;
     }
 
@@ -47,8 +48,8 @@ public class Player {
         return userName;
     }
 
-    public void setUserName(String user) {
-        this.userName = user;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String toString() {
@@ -67,12 +68,12 @@ public class Player {
         this.gamePlayers = gamePlayers;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return mail;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String mail) {
+        this.mail = mail;
     }
 
     public String getPassword() {
@@ -83,11 +84,40 @@ public class Player {
         this.password = password;
     }
 
-    public Set<Score> getScores() {
+    public List<Score> getScores() {
         return scores;
     }
 
-    public void setScores(Set<Score> scores) {
+    public void setScores(List<Score> scores) {
         this.scores = scores;
     }
+
+    public float getScore(Player player){
+
+        return getWins(player.getScores()) + getDraws(player.getScores())*(float)0.5 + getLosses(player.getScores())*0 ;
+    }
+
+    public float getWins(List<Score> scores){
+
+        return scores
+                .stream()
+                .filter(score -> score.getScore() == 1)
+                .count();
+    }
+
+    public float getDraws(List<Score> scores){
+
+        return scores
+                .stream()
+                .filter(score -> score.getScore() == 0.5)
+                .count();
+    }
+    public float getLosses(List<Score> scores){
+
+        return scores
+                .stream()
+                .filter(score -> score.getScore() == 0)
+                .count();
+    }
+
 }
