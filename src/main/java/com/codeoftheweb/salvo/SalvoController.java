@@ -1,9 +1,10 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -216,20 +217,23 @@ public class SalvoController {
         return dto;
     }
 
-/*    public List<Object> makeSalvoesListaDTO(Set<Salvo> salvoes) {
-        return salvoes
-                .stream()
-                .map(salvo -> makeSalvoDTO(salvo))
-                .collect(Collectors.toList());
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @RequestMapping(path = "/persons", method = RequestMethod.POST)
+    public ResponseEntity<Object> register(
+            @RequestParam String userName,
+            @RequestParam String email, @RequestParam String password) {
+
+        if (userName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+
+        if (playerRepository.findByUserName(userName) !=  null) {
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+        }
+
+        playerRepository.save(new Player(userName, email, passwordEncoder.encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
-    private Map<String, Object> makeSalvoDTO(Salvo salvo) {
-
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("turn", salvo.getTurn());
-        dto.put("player", salvo.getGamePlayer().getId());
-        dto.put("locations", salvo.getLocations());
-
-        return dto;
-    }*/
 }

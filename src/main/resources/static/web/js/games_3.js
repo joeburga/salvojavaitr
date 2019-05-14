@@ -10,8 +10,8 @@ $(function() {
 
 function updateViewGames(data) {
   var userTxt = data.player;
-  var htmlList = data.games.map(function (games) {
-      return  '<li class="list-group-item">' + new Date(games.crationDate).toLocaleString() + ' ' + games.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</li>';
+  var htmlList = data.map(function (games) {
+      return  '<li class="list-group-item">' + new Date(games.creationDate).toLocaleString() + ' ' + games.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</li>';
   }).join('');
   $("#game-list").html(htmlList);
   if(userTxt!="Guest"){
@@ -22,7 +22,7 @@ function updateViewGames(data) {
 
 function updateViewLBoard(data) {
   var htmlList = data.map(function (score) {
-      return  '<tr><td>' + score.name + '</td>'
+      return  '<tr><td>' + score.score.name + '</td>'
               + '<td>' + score.score.total + '</td>'
               + '<td>' + score.score.won + '</td>'
               + '<td>' + score.score.lost + '</td>'

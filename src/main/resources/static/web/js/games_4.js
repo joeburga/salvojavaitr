@@ -10,7 +10,9 @@ $(function() {
 
 function updateViewGames(data) {
   var userData = data.player;
-  var htmlList = data.games.map(function (games) {
+    console.log(userData);
+
+    var htmlList = data.map(function (games) {
       return getGameItem(games,userData);
   }).join('');
   $("#game-list").html(htmlList);
@@ -21,10 +23,13 @@ function updateViewGames(data) {
 }
 
 function getGameItem(gameData, userData){
-    var item = '<li class="list-group-item">'+ new Date(gameData.crationDate).toLocaleString() + ' ' + gameData.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</li>';
+    console.log(gameData);
+    var item = '<li class="list-group-item">'+ new Date(gameData.creationDate).toLocaleString() + ' ' + gameData.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</li>';
     var idPlayerInGame = isPlayerInGame(userData.id,gameData);
+    console.log(userData.id);
+
     if (idPlayerInGame != -1)
-        item = '<li class="list-group-item"><a href="game_2.html?gp='+ idPlayerInGame + '">'+ new Date(gameData.crationDate).toLocaleString() + ' ' + gameData.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</a></li>';
+        item = '<li class="list-group-item"><a href="game_2.html?gp='+ idPlayerInGame + '">'+ new Date(gameData.creationDate).toLocaleString() + ' ' + gameData.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</a></li>';
     return item;
 }
 
@@ -39,7 +44,7 @@ function isPlayerInGame(idPlayer,gameData){
 
 function updateViewLBoard(data) {
   var htmlList = data.map(function (score) {
-      return  '<tr><td>' + score.name + '</td>'
+      return  '<tr><td>' + score.score.name + '</td>'
               + '<td>' + score.score.total + '</td>'
               + '<td>' + score.score.won + '</td>'
               + '<td>' + score.score.lost + '</td>'

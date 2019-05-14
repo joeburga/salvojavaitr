@@ -1,19 +1,38 @@
 package com.codeoftheweb.salvo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
-public class SalvoApplication {
+public class SalvoApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class);
 
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
 	@Bean
@@ -185,12 +204,16 @@ public class SalvoApplication {
 			salvoRepository.save(salvo7);
 			salvoRepository.save(salvo8);
 
-			Score score1 = new Score(game1,player1,1,date4);
-			Score score2 = new Score(game1,player2,1,date1);
-			Score score3 = new Score(game2,player3,1,date2);
-            Score score4 = new Score(game2,player2, (float)0.5,date2);
-            Score score5 = new Score(game3,player3,0,date2);
-            Score score6 = new Score(game3,player1,1,date2);
+			float win = 1;
+			float loss = 0;
+			float draw = (float)0.5;
+
+			Score score1 = new Score(game1,player1,win,date4);
+			Score score2 = new Score(game1,player2,win,date1);
+			Score score3 = new Score(game2,player3,win,date2);
+            Score score4 = new Score(game2,player2,draw,date2);
+            Score score5 = new Score(game3,player3,loss,date2);
+            Score score6 = new Score(game3,player1,win,date2);
 
 
             scoreRepository.save(score1);
@@ -203,4 +226,47 @@ public class SalvoApplication {
         };
 	}
 
+}
+
+@Configuration
+class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+
+	@Autowired
+	PlayerRepository playerRepository;
+
+	@Override
+	public void init(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(inputName-> {
+			Player player = playerRepository.findByUserName(inputName);
+			if (player != null) {
+				return new User(player.getEmail(), player.getPassword(),
+						AuthorityUtils.createAuthorityList("USER"));
+			} else {
+				throw new UsernameNotFoundException("Unknown user: " + inputName);
+			}
+		});
+	}
+
+	@EnableWebSecurity
+	@Configuration
+	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests()
+					.antMatchers("/admin/**").hasAuthority("ADMIN")
+					.antMatchers("/**").hasAuthority("USER")
+					.and()
+					.formLogin()
+
+			//http.formLogin()
+					.usernameParameter("name")
+					.passwordParameter("pwd")
+					.loginPage("/api/login");
+
+			http.logout().logoutUrl("/api/logout");
+
+			http.csrf().disable();
+		}
+	}
 }
