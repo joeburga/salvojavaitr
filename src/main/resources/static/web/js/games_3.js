@@ -50,11 +50,13 @@ function loadData() {
 }
 
 function login(){
-  $.post("/api/login", { username: $("#username").val(), password: $("#password").val()})
+/*  $.post("/api/login", { username: $("#username").val(), password: $("#password").val()})
     .done(function() {
       loadData(),
       showLogin(false);
-    });
+    });*/
+  $.post("/api/login", { mail: "j.bauer@ctu.gov", password: "123" }).done(function() { console.log("logged in!"); })
+
 }
 
 function logout(){

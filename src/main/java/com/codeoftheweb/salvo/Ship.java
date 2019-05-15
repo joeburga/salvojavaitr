@@ -23,7 +23,7 @@ public class Ship {
     //Utilizo @ElementCollection para Simple OneToMany Relations with Basic Types,
     //porque no es una clase, es una lista.
     @ElementCollection
-    @Column(name="shipLocation_id")
+    @Column(name="locations")
     private List<String> locations = new ArrayList<>();
 
     public Ship(){};

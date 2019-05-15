@@ -181,10 +181,25 @@ public class SalvoController {
         //estoy en un gameplayer luiego getgame para ir al juego donde estoy,
         // luego desde el game traig los gamePlayers.
         dto.put("gamePlayers",makeGamePlayersListaDTO(gamePlayer.getGame().getGamePlayers()));
-        dto.put("ships",gamePlayer.getShips()); //makeShipsListaDTO(gamePlayer.getShips()
+        dto.put("ships", makeShipsListaDTO(gamePlayer.getShips())); // gamePlayer.getShips()
         dto.put("salvoes", makeListGames(gamePlayer.getGame()));
         //gamePlayer.getGame().getGamePlayers().stream().map(gamePlayer1 -> makeSalvoesListaDTO(gamePlayer1.getSalvoes()))
         dto.put("scores", makeListGamesScores(gamePlayer.getGame().getScores()));
+
+        return dto;
+    }
+    public List<Object> makeShipsListaDTO(Set<Ship> ships) {
+        return ships
+                .stream()
+                .map(ship -> makeShipDTO(ship))
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, Object> makeShipDTO(Ship ship) {
+
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("type", ship.getType());
+        dto.put("locations", ship.getLocations());
 
         return dto;
     }
@@ -217,10 +232,10 @@ public class SalvoController {
         return dto;
     }
 
-    @Autowired
+/*    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @RequestMapping(path = "/persons", method = RequestMethod.POST)
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
             @RequestParam String userName,
             @RequestParam String email, @RequestParam String password) {
@@ -229,11 +244,12 @@ public class SalvoController {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
 
-        if (playerRepository.findByUserName(userName) !=  null) {
+        if (playerRepository.findByEmail(email) !=  null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
 
         playerRepository.save(new Player(userName, email, passwordEncoder.encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+
+    }*/
 }

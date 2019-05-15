@@ -22,7 +22,7 @@ public class Salvo {
     private int turn;
 
     @ElementCollection
-    @Column(name="salvoLocation_id")
+    @Column(name="locations")
     private List<String> locations = new ArrayList<>();
 
     public Salvo(){};

@@ -17,7 +17,7 @@ public class Player {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private String userName;
-    private String mail;
+    private String email;
     private String password;
 
     //Mapea la columna player
@@ -29,9 +29,9 @@ public class Player {
 
     public Player() { }
 
-    public Player(String userName, String mail, String password) {
+    public Player(String userName, String email, String password) {
         this.userName = userName;
-        this.mail = mail;
+        this.email = email;
         this.password = password;
     }
 
@@ -69,11 +69,11 @@ public class Player {
     }
 
     public String getEmail() {
-        return mail;
+        return email;
     }
 
-    public void setEmail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
