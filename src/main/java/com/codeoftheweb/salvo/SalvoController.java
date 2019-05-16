@@ -3,6 +3,9 @@ package com.codeoftheweb.salvo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,61 +16,29 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class SalvoController {
 
-/*    @Autowired
-    private GamePlayerRepository repoGamePlayer;
-
-    @RequestMapping("/gamePlayer")
-    public List<GamePlayer> getAll() {
-        return repoGamePlayer.findAll();
-    }
-
-    // Tarea 4 : Lista con los IDs
-    @Autowired
-    private GameRepository repoGame;
-
-    @RequestMapping("/gamesIDs")
-    public List<Long> getGamesIDs() {
-        List<Game> games;
-        List<Long> indices = new ArrayList<>();
-        
-        games = repoGame.findAll();
-
-        for (Game game:games) {
-            indices.add(game.getId());
-        }
-
-        return indices;
-    }*/
-
-    //Tarea 5 : Lista con los IDs y Fechas de creacion
-/*
-    @Autowired
-    private GameRepository repoIDsFechas;
-
-    @RequestMapping("/allGames")
-    public List<Object> getAllGames() {
-        return repoIDsFechas
-                .findAll()
-                .stream()
-                .map(game -> makeGameDTO(game))
-                .collect(Collectors.toList());
-    }
-
-    private Map<String, Object> makeGameDTO(Game game) {
-
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-            dto.put("id", game.getId());
-            dto.put("created", game.getDate());
-
-        return dto;
-    }
-*/
-
     //Tarea 6  : Lista con los IDs de GamePlayers , Fechas de creacion y GamePlayers(con sus IDs y emails de los players)
     @Autowired
     private GameRepository repoAllGame;
 
+
+
     @RequestMapping("/games")
+    public Map<String, Object> makeLoggedPlayer(Authentication authentication) {
+
+        Map<String, Object> dto = new LinkedHashMap<>();
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticatedPlayer = getAuthentication(authentication);
+
+        if (authenticatedPlayer == null)
+            dto.put("player", "Guest");
+        else
+            dto.put("player", makePlayerDTO(authenticatedPlayer));
+
+
+        dto.put("games", getAllGamePlayers());
+
+        return dto;
+    }
     public List<Object> getAllGamePlayers() {
         return repoAllGame
                 .findAll()
@@ -75,6 +46,16 @@ public class SalvoController {
                 .map(game -> makeGameDTO(game))
                 .collect(Collectors.toList());
     }
+    private Player getAuthentication(Authentication authentication) {
+
+        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
+            return null;
+        } else {
+
+           return playerRepository.findByEmail(authentication.getName());
+        }
+    }
+
 
     private Map<String, Object> makeGameDTO(Game game) {
 
@@ -232,11 +213,11 @@ public class SalvoController {
         return dto;
     }
 
-/*    @Autowired
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(
+    public ResponseEntity<String> createUser(
             @RequestParam String userName,
             @RequestParam String email, @RequestParam String password) {
 
@@ -251,5 +232,6 @@ public class SalvoController {
         playerRepository.save(new Player(userName, email, passwordEncoder.encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED);
 
-    }*/
+    }
+
 }

@@ -251,6 +251,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 			}
 		});
 	}
+}
 
 @EnableWebSecurity
 @Configuration
@@ -258,22 +259,25 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests()/*.anyRequest().fullyAuthenticated().
-					and().formLogin();*/
-					.antMatchers("/admin/**").hasAuthority("ADMIN")
-					.antMatchers("/**").hasAuthority("USER")
-					.and()
-					.formLogin();
+			http.authorizeRequests()
+					.antMatchers( "/web/games_3.html").permitAll()
+					.antMatchers( "/web/**").permitAll()
+					.antMatchers( "/api/games.").permitAll()
+					.antMatchers( "/api/players").permitAll()
+					.antMatchers( "/api/game_view/*").hasAuthority("user")
+					.antMatchers( "/rest/*").denyAll()
+					.anyRequest().permitAll();
 
-/*			http.formLogin()
-					.usernameParameter("name")
-					.passwordParameter("pwd")
+			http.formLogin()
+					.usernameParameter("email")
+					.passwordParameter("password")
 					.loginPage("/api/login");
 
-			http.logout().logoutUrl("/api/logout");*/
+			http.logout().logoutUrl("/api/logout");
 
 			http.csrf().disable();
-/*			// if user is not authenticated, just send an authentication failure response
+
+			// if user is not authenticated, just send an authentication failure response
 			http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
 			// if login is successful, just clear the flags asking for authentication
@@ -283,16 +287,17 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
 			// if logout is successful, just send a success response
-			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());*/
+			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 		}
-	}
 
-/*	private void clearAuthenticationAttributes(HttpServletRequest request) {
+
+	private void clearAuthenticationAttributes(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
 		}
-	}*/
+	}
 }
+
 
 

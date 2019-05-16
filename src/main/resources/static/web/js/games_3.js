@@ -10,12 +10,12 @@ $(function() {
 
 function updateViewGames(data) {
   var userTxt = data.player;
-  var htmlList = data.map(function (games) {
+  var htmlList = data.games.map(function (games) {
       return  '<li class="list-group-item">' + new Date(games.creationDate).toLocaleString() + ' ' + games.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</li>';
   }).join('');
   $("#game-list").html(htmlList);
   if(userTxt!="Guest"){
-    $("#user-info").text('Hello ' + userTxt.name + '!');
+    $("#user-info").text('Hello ' + userTxt.email + '!');
     showLogin(false);
   }
 }
@@ -50,12 +50,12 @@ function loadData() {
 }
 
 function login(){
-/*  $.post("/api/login", { username: $("#username").val(), password: $("#password").val()})
+  $.post("/api/login", { email: $("#username").val(), password: $("#password").val()})
     .done(function() {
       loadData(),
       showLogin(false);
-    });*/
-  $.post("/api/login", { mail: "j.bauer@ctu.gov", password: "123" }).done(function() { console.log("logged in!"); })
+    });
+  //$.post("/api/login", { mail: "j.bauer@ctu.gov", password: "123" }).done(function() { console.log("logged in!"); })
 
 }
 

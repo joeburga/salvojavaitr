@@ -10,9 +10,7 @@ $(function() {
 
 function updateViewGames(data) {
   var userData = data.player;
-    console.log(userData);
-
-    var htmlList = data.map(function (games) {
+  var htmlList = data.map(function (games) {
       return getGameItem(games,userData);
   }).join('');
   $("#game-list").html(htmlList);
