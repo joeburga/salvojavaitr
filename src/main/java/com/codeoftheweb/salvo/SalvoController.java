@@ -18,9 +18,7 @@ public class SalvoController {
 
     //Tarea 6  : Lista con los IDs de GamePlayers , Fechas de creacion y GamePlayers(con sus IDs y emails de los players)
     @Autowired
-    private GameRepository repoAllGame;
-
-
+    private GameRepository gameRepository;
 
     @RequestMapping("/games")
     public Map<String, Object> makeLoggedPlayer(Authentication authentication) {
@@ -40,7 +38,7 @@ public class SalvoController {
         return dto;
     }
     public List<Object> getAllGamePlayers() {
-        return repoAllGame
+        return gameRepository
                 .findAll()
                 .stream()
                 .map(game -> makeGameDTO(game))
@@ -81,7 +79,7 @@ public class SalvoController {
     private Map<String, Object> makeGamePlayersDTO(GamePlayer gamePlayer) {
 
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", gamePlayer.getId());
+        dto.put("gpid", gamePlayer.getId());
         dto.put("player", makePlayerDTO(gamePlayer.getPlayer()));
 
         return dto;
@@ -107,7 +105,7 @@ public class SalvoController {
     private Map<String, Object> makeScoreDTO(Score score) {
 
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("player", score.getPlayer().getId());
+        dto.put("playerID", score.getPlayer().getId());
         dto.put("score", score.getScore());
         dto.put("finishDate", score.getFinishDate());
 
@@ -234,4 +232,26 @@ public class SalvoController {
 
     }
 
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticatedPlayer = getAuthentication(authentication);
+        if(authenticatedPlayer == null){
+            return new ResponseEntity<>(makeMap("error","No name given"), HttpStatus.FORBIDDEN);
+        } else {
+            Date date = Date.from(java.time.ZonedDateTime.now().toInstant());
+            Game auxGame = new Game(date);
+            gameRepository.save(auxGame);
+
+            GamePlayer auxGameP = new GamePlayer(auxGame,authenticatedPlayer);
+            gamePlayerRepository.save(auxGameP);
+            return new ResponseEntity<>(makeMap("gpid", auxGameP.getId()), HttpStatus.CREATED);
+        }
+    }
+
+    private Map<String, Object> makeMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
+    }
 }
