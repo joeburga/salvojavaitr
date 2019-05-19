@@ -9,6 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -215,16 +217,16 @@ public class SalvoController {
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
-    public ResponseEntity<String> createUser(
+    public ResponseEntity<Map<String, Object>> createUser(
             @RequestParam String userName,
             @RequestParam String email, @RequestParam String password) {
 
         if (userName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","Missing data"), HttpStatus.FORBIDDEN);
         }
 
         if (playerRepository.findByEmail(email) !=  null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","Name already in use"), HttpStatus.FORBIDDEN);
         }
 
         playerRepository.save(new Player(userName, email, passwordEncoder.encode(password)));
@@ -253,5 +255,45 @@ public class SalvoController {
         Map<String, Object> map = new HashMap<>();
         map.put(key, value);
         return map;
+    }
+
+    // Probando .. ..
+    @RequestMapping(path = "/game/{nn}/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> joinGame(@PathVariable Long nn,Authentication authentication) {
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticatedPlayer = getAuthentication(authentication);
+        if(authenticatedPlayer == null){
+            return new ResponseEntity<>(makeMap("error","No name given"), HttpStatus.FORBIDDEN);
+        }/* else if (!gameRepository.findById(nn).isPresent()){
+
+            return new ResponseEntity<>(makeMap("error","No such game"), HttpStatus.FORBIDDEN);
+        } else if (gameRepository.findById(nn).get().getGamePlayers().stream().map(g -> g.getPlayer()).count() >= 2){
+            return new ResponseEntity<>(makeMap("error","Game is full"), HttpStatus.FORBIDDEN);
+
+        }*/
+
+        GamePlayer auxGameP = new GamePlayer(gameRepository.findById(nn).get(),authenticatedPlayer);
+        gamePlayerRepository.save(auxGameP);
+        return new ResponseEntity<>(makeMap("gpid", auxGameP.getId()), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/games/players/{gamePlayerId}/ships", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> makeListShips(@PathVariable Long gamePlayerId,Authentication authentication) {
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticatedPlayer = getAuthentication(authentication);
+
+        GamePlayer gplayer = gamePlayerRepository.findById(gamePlayerId).orElse(null);
+
+        if(authenticatedPlayer == null){
+            return new ResponseEntity<>(makeMap("error","No name given"), HttpStatus.UNAUTHORIZED);
+        } else if(gplayer == null) {
+
+            return new ResponseEntity<>(makeMap("error", "No gamePlayerID given"), HttpStatus.UNAUTHORIZED);
+        }
+
+        GamePlayer auxGameP = new GamePlayer(gameRepository.findById(gamePlayerId).get(),authenticatedPlayer);
+        gamePlayerRepository.save(auxGameP);
+        return new ResponseEntity<>(makeMap("gpid", auxGameP.getShips()), HttpStatus.CREATED);
+
     }
 }

@@ -168,7 +168,8 @@ function showSelf (gamePlayerData) {
     youID = "";
 
     gamePlayerData.gamePlayers.forEach(function(gamePlayer) {
-        if (gamePlayer.id == getParameterByName("gp")) {
+            //Prueba: Cambie gamePlayer.id por gamePlayer.gpid
+        if (gamePlayer.gpid == getParameterByName("gp")) {
             you = gamePlayer.player.email;
             youID = gamePlayer.player.id;
         } else {

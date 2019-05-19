@@ -215,7 +215,9 @@ function showGamesTable(gamesData) {
 
                 }
                 if (gamesData[i].gamePlayers[j].player.id == data.player.id) {
-                    gpid = gamesData[i].gamePlayers[j].id;
+                    //Cambie gamesData[i].gamePlayers[j].id por gamesData[i].gamePlayers[j].gpid
+                    //ya que en el SalvoController al id de gamePlayer lo tengo como gpid.
+                    gpid = gamesData[i].gamePlayers[j].gpid;
                     isLoggedPlayer = true;
                 }
             }

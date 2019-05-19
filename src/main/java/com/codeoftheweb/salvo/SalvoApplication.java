@@ -76,14 +76,13 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			GamePlayer gamePlayer1 = new GamePlayer(game1,player1);
 			GamePlayer gamePlayer2 = new GamePlayer(game1,player2);
-			GamePlayer gamePlayer3 = new GamePlayer(game3,player3);
-			GamePlayer gamePlayer4 = new GamePlayer(game4,player4);
-			GamePlayer gamePlayer5 = new GamePlayer(game3,player2);
-			GamePlayer gamePlayer6 = new GamePlayer(game3,player4);
-			GamePlayer gamePlayer7 = new GamePlayer(game4,player2);
+			GamePlayer gamePlayer3 = new GamePlayer(game2,player4);
+			GamePlayer gamePlayer4 = new GamePlayer(game2,player1);
+			GamePlayer gamePlayer5 = new GamePlayer(game3,player3);
+			GamePlayer gamePlayer6 = new GamePlayer(game3,player2);
+			GamePlayer gamePlayer7 = new GamePlayer(game4,player4);
 			GamePlayer gamePlayer8 = new GamePlayer(game4,player1);
-			GamePlayer gamePlayer9 = new GamePlayer(game2,player4);
-			GamePlayer gamePlayer10 = new GamePlayer(game2,player1);
+
 
 			gamePlayerRepository.save(gamePlayer1);
 			gamePlayerRepository.save(gamePlayer2);
@@ -93,8 +92,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayerRepository.save(gamePlayer6);
 			gamePlayerRepository.save(gamePlayer7);
 			gamePlayerRepository.save(gamePlayer8);
-			gamePlayerRepository.save(gamePlayer9);
-			gamePlayerRepository.save(gamePlayer10);
+
 
 
 
@@ -121,14 +119,14 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			Ship ship1 = new Ship("Destroyer",gamePlayer1,shipLocation1);
 			Ship ship2 = new Ship("Submarine",gamePlayer2,shipLocation2);
-			Ship ship3 = new Ship("Patrol boat",gamePlayer3,shipLocation3);
-			Ship ship4 = new Ship("Carrier",gamePlayer4,shipLocation4);
-			Ship ship5 = new Ship("Thanos",gamePlayer5,shipLocation2);
+			Ship ship3 = new Ship("Patrol boat",gamePlayer5,shipLocation3);
+			Ship ship4 = new Ship("Carrier",gamePlayer7,shipLocation4);
+			Ship ship5 = new Ship("Thanos",gamePlayer6,shipLocation2);
 			Ship ship6 = new Ship("Thor",gamePlayer2,shipLocation3);
 			Ship ship7 = new Ship("Wakanda",gamePlayer1,shipLocation4);
-			Ship ship8 = new Ship("Iron",gamePlayer3,shipLocation1);
-			Ship ship9 = new Ship("Iron",gamePlayer4,shipLocation2);
-			Ship ship10 = new Ship("Iron",gamePlayer5,shipLocation3);
+			Ship ship8 = new Ship("Iron",gamePlayer5,shipLocation1);
+			Ship ship9 = new Ship("Iron",gamePlayer7,shipLocation2);
+			Ship ship10 = new Ship("Iron",gamePlayer6,shipLocation3);
 
 
 			shipRepository.save(ship1);
@@ -194,10 +192,10 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Salvo salvo2 = new Salvo(gamePlayer2,1,salvoLocation6);
 			Salvo salvo3 = new Salvo(gamePlayer1,2,salvoLocation2);
 			Salvo salvo4 = new Salvo(gamePlayer2,2,salvoLocation7);
-			Salvo salvo5 = new Salvo(gamePlayer3,1,salvoLocation3);
-			Salvo salvo6 = new Salvo(gamePlayer3,1,salvoLocation8);
-			Salvo salvo7 = new Salvo(gamePlayer4,2,salvoLocation4);
-			Salvo salvo8 = new Salvo(gamePlayer4,2,salvoLocation9);
+			Salvo salvo5 = new Salvo(gamePlayer5,1,salvoLocation3);
+			Salvo salvo6 = new Salvo(gamePlayer5,1,salvoLocation8);
+			Salvo salvo7 = new Salvo(gamePlayer7,2,salvoLocation4);
+			Salvo salvo8 = new Salvo(gamePlayer7,2,salvoLocation9);
 
 
 			salvoRepository.save(salvo1);
@@ -219,7 +217,8 @@ public class SalvoApplication extends SpringBootServletInitializer {
             Score score4 = new Score(game2,player2,draw,date2);
             Score score5 = new Score(game3,player3,loss,date2);
             Score score6 = new Score(game3,player1,win,date2);
-
+			Score score7 = new Score(game4,player4,draw,date2);
+			Score score8 = new Score(game4,player1,win,date2);
 
             scoreRepository.save(score1);
 			scoreRepository.save(score2);
@@ -227,6 +226,8 @@ public class SalvoApplication extends SpringBootServletInitializer {
             scoreRepository.save(score4);
             scoreRepository.save(score5);
             scoreRepository.save(score6);
+			scoreRepository.save(score7);
+			scoreRepository.save(score8);
 
         };
 	}
@@ -264,7 +265,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.antMatchers( "/web/**").permitAll()
 					.antMatchers( "/api/games.").permitAll()
 					.antMatchers( "/api/players").permitAll()
-					.antMatchers( "/api/game_view/*").hasAuthority("USER")
+					.antMatchers( "/api/game_view/**").hasAuthority("USER")
 					.antMatchers( "/rest/*").denyAll()
 					.anyRequest().permitAll();
 
