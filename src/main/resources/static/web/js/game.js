@@ -1,5 +1,7 @@
 // var player1 = "p1_";
 // var player2 = "p2_";
+postShipLocations(makePostUrl());
+postSalvo(makePostUrlSalvoes());
 var gamePlayerData = {};
 var errorMsg;
 var you = "";
@@ -292,7 +294,9 @@ function createTable(player) {
 function postShipLocations (postUrl) {
     $.post({
         url: postUrl,
-        data: shipsJSON,
+        //Para ver los ships en el task 3 y agrego JSON.stringify
+        //data: shipsJSON,
+        data: JSON.stringify([{type: "destroyer", locations: ["A1", "A2", "A3"]},{type: "destroyer", locations: ["A1", "A2", "A3"]}]),
         dataType: "text",
         contentType: "application/json"
     })
@@ -319,7 +323,8 @@ function postShipLocations (postUrl) {
 function postSalvo (postUrl) {
     $.post({
         url: postUrl,
-        data: salvoJSON,
+        //data: salvoJSON,
+        data: JSON.stringify({turn: 3, locations: ["A1", "A2", "A3"]}),
         dataType: "text",
         contentType: "application/json"
     })
