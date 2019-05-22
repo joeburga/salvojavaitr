@@ -94,8 +94,6 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayerRepository.save(gamePlayer8);
 
 
-
-
 			List<String> shipLocation1 = new ArrayList<>();
 			shipLocation1.add("H2");
 			shipLocation1.add("H3");
@@ -117,17 +115,28 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipLocation4.add("A4");
 			shipLocation4.add("A5");
 
+			List<String> shipLocation5 = new ArrayList<>();
+			shipLocation5.add("B1");
+			shipLocation5.add("C1");
+			shipLocation5.add("D1");
+			shipLocation5.add("E1");
+
 			Ship ship1 = new Ship("Destroyer",gamePlayer1,shipLocation1);
 			Ship ship2 = new Ship("Submarine",gamePlayer2,shipLocation2);
-			Ship ship3 = new Ship("Patrol boat",gamePlayer5,shipLocation3);
-			Ship ship4 = new Ship("Carrier",gamePlayer7,shipLocation4);
-			Ship ship5 = new Ship("Thanos",gamePlayer6,shipLocation2);
-			Ship ship6 = new Ship("Thor",gamePlayer2,shipLocation3);
-			Ship ship7 = new Ship("Wakanda",gamePlayer1,shipLocation4);
-			Ship ship8 = new Ship("Iron",gamePlayer5,shipLocation1);
-			Ship ship9 = new Ship("Iron",gamePlayer7,shipLocation2);
-			Ship ship10 = new Ship("Iron",gamePlayer6,shipLocation3);
-
+			Ship ship3 = new Ship("Patrol boat",gamePlayer3,shipLocation3);
+			Ship ship4 = new Ship("Carrier",gamePlayer4,shipLocation4);
+			Ship ship5 = new Ship("Battleship",gamePlayer5,shipLocation5);
+			Ship ship6 = new Ship("Battleship",gamePlayer1,shipLocation1);
+			Ship ship7 = new Ship("Patrol boat",gamePlayer2,shipLocation2);
+			Ship ship8 = new Ship("Carrier",gamePlayer3,shipLocation3);
+			Ship ship9 = new Ship("Submarine",gamePlayer4,shipLocation4);
+			Ship ship10 = new Ship("Destroyer",gamePlayer5,shipLocation5);
+			Ship ship11 = new Ship("Patrol boat",gamePlayer6,shipLocation5);
+			Ship ship12 = new Ship("Battleship",gamePlayer7,shipLocation1);
+			Ship ship13 = new Ship("Carrier",gamePlayer8,shipLocation2);
+			Ship ship14 = new Ship("Battleship",gamePlayer6,shipLocation3);
+			Ship ship15 = new Ship("Submarine",gamePlayer7,shipLocation4);
+			Ship ship16 = new Ship("Destroyer",gamePlayer8,shipLocation5);
 
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
@@ -139,6 +148,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipRepository.save(ship8);
 			shipRepository.save(ship9);
 			shipRepository.save(ship10);
+			shipRepository.save(ship11);
+			shipRepository.save(ship12);
+			shipRepository.save(ship13);
+			shipRepository.save(ship14);
+			shipRepository.save(ship15);
+			shipRepository.save(ship16);
 
 
 			List<String> salvoLocation1 = new ArrayList<>();
@@ -190,12 +205,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			Salvo salvo1 = new Salvo(gamePlayer1,1,salvoLocation1);
 			Salvo salvo2 = new Salvo(gamePlayer2,1,salvoLocation6);
-			Salvo salvo3 = new Salvo(gamePlayer1,2,salvoLocation2);
-			Salvo salvo4 = new Salvo(gamePlayer2,2,salvoLocation7);
+			Salvo salvo3 = new Salvo(gamePlayer3,2,salvoLocation2);
+			Salvo salvo4 = new Salvo(gamePlayer4,2,salvoLocation7);
 			Salvo salvo5 = new Salvo(gamePlayer5,1,salvoLocation3);
-			Salvo salvo6 = new Salvo(gamePlayer5,1,salvoLocation8);
+			Salvo salvo6 = new Salvo(gamePlayer6,1,salvoLocation8);
 			Salvo salvo7 = new Salvo(gamePlayer7,2,salvoLocation4);
-			Salvo salvo8 = new Salvo(gamePlayer7,2,salvoLocation9);
+			Salvo salvo8 = new Salvo(gamePlayer8,2,salvoLocation9);
 
 
 			salvoRepository.save(salvo1);
@@ -275,6 +290,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.loginPage("/api/login");
 
 			http.logout().logoutUrl("/api/logout");
+
+			// VER BASE DE DATOS H2
+			http.headers().frameOptions().sameOrigin();
 
 			http.csrf().disable();
 
