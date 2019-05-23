@@ -111,41 +111,101 @@ public class SalvoController {
         dto.put("scores", makeListGamesScores(gamePlayer.getGame().getScores()));
 
         // Task 5 - 1
-        dto.put("turn", makeSalvoesTurnDTO(gamePlayer.getSalvoes()));
+        //dto.put("hits", makeHitsListaDTO(gamePlayer.getGame().getGamePlayers()));
+        dto.put("hits", gamePlayerHits(gamePlayer));
 
         return dto;
     }
+
     ///////////////////////////// Task 5 - 1
-    public List<Map<String, Object>> makeSalvoesTurnDTO(Set<Salvo> salvoes) {
-        return salvoes
-                .stream()
-                .map(salvo -> makeSalvoTurnDTO(salvo))
+
+    private Map<String, Object> gamePlayerHits(GamePlayer gamePlayer) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+
+        dto.put("self", getHits(gamePlayer));
+        dto.put("opponent", getHits(getOpponent(gamePlayer)));
+
+        //dto.put("opponent", getOpponent(gamePlayer).getShips().stream().map(ship -> ship.getLocations() + ship.getType()));
+
+        return dto;
+    }
+
+    private Map<String, Object> getHits(GamePlayer gamePlayer) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+
+
+        dto.put("turn", gamePlayer.getSalvoes().stream().findFirst().get().getTurn());
+        //hitsLocations mis salvos acertados en el ship del oponente
+        dto.put("hitLocations", salvoesAcertadosPlayer(gamePlayer.getSalvoes(),getOpponent(gamePlayer).getShips()));
+        dto.put("misSalvos", gamePlayer.getSalvoes().stream().findFirst().get().getLocations());
+        dto.put("misShips", gamePlayer.getShips().stream().map(ship -> ship.getType() + " " + ship.getLocations()));
+        //dto.put("damages", damageHits(gamePlayer));
+        dto.put("missed", missedSalvoes(gamePlayer.getSalvoes(),getOpponent(gamePlayer).getShips()));
+
+
+        return dto;
+    }
+
+ /*   private Map<String, Object> damageHits(GamePlayer gamePlayer) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+
+        //dto.put("carrierHits", getCarrier);
+        dto.put("patrolboatHits",getPatrolBoatHits(gamePlayer));
+
+        return dto;
+    }
+
+    public int getPatrolBoatHits(GamePlayer gamePlayer){
+
+        getOpponent(gamePlayer).getShips().stream().map(ship -> ship.getType()).collect(Collectors.toList());
+
+
+    }*/
+
+    public int missedSalvoes(Set<Salvo> salvoes,Set<Ship> ships) {
+
+        List<String> salvoLocations =  salvoes.stream().map(salvo -> salvo.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
+        List<String> shipLocations =  ships.stream().map(ship -> ship.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
+
+/*        for (String t : salvoLocations) {
+            if(shipLocations.contains(t)) {
+                acertados.add(t);
+            }
+        }*/
+
+        List<String> salvoesAcertados = salvoLocations.stream()
+                .filter(shipLocations::contains)
                 .collect(Collectors.toList());
+
+        return shipLocations.size() - salvoesAcertados.size();
     }
 
-    private Map<String, Object> makeSalvoTurnDTO(Salvo salvo) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+    public List<String> salvoesAcertadosPlayer(Set<Salvo> salvoes,Set<Ship> ships) {
 
-        dto.put("turn", salvo.getTurn());
-        dto.put("hits", makeHitsDTO(salvo.getGamePlayer()));
+        List<String> salvoLocations =  salvoes.stream().map(salvo -> salvo.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
+        List<String> shipLocations =  ships.stream().map(ship -> ship.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
 
-        return dto;
+/*        for (String t : salvoLocations) {
+            if(shipLocations.contains(t)) {
+                acertados.add(t);
+            }
+        }*/
+
+        List<String> salvoesAcertados = salvoLocations.stream()
+                .filter(shipLocations::contains)
+                .collect(Collectors.toList());
+
+        return salvoesAcertados;
     }
 
-    private Map<String, Object> makeHitsDTO(GamePlayer gamePlayer) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-
-        Set<GamePlayer> gamePlayers = gamePlayer.getGame().getGamePlayers();
-        Player player1 = gamePlayers.stream().map(gamePlayer1 -> gamePlayer1.getPlayer()).findFirst().get();
-
-
-        dto.put("self",player1);
-        //dto.put("opponent", gamePlayer.getPlayer());
-
-        return dto;
+    private GamePlayer getOpponent(GamePlayer gamePlayer){
+        return gamePlayer.getGame().getGamePlayers().stream()
+                .filter(gp -> gp != gamePlayer)
+                .findFirst()
+                .orElse(null);
     }
+
 /////////////////////////////
-
 
 
     public List<Object> getAllGamePlayers() {

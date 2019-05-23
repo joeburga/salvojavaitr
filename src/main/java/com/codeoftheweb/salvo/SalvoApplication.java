@@ -100,9 +100,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipLocation1.add("H4");
 
 			List<String> shipLocation2 = new ArrayList<>();
-			shipLocation2.add("E1");
-			shipLocation2.add("F1");
-			shipLocation2.add("G1");
+			shipLocation2.add("F3");
+			shipLocation2.add("F4");
+			shipLocation2.add("F5");
 
 			List<String> shipLocation3 = new ArrayList<>();
 			shipLocation3.add("B4");
@@ -126,15 +126,15 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Ship ship3 = new Ship("Patrol boat",gamePlayer3,shipLocation3);
 			Ship ship4 = new Ship("Carrier",gamePlayer4,shipLocation4);
 			Ship ship5 = new Ship("Battleship",gamePlayer5,shipLocation5);
-			Ship ship6 = new Ship("Battleship",gamePlayer1,shipLocation1);
-			Ship ship7 = new Ship("Patrol boat",gamePlayer2,shipLocation2);
-			Ship ship8 = new Ship("Carrier",gamePlayer3,shipLocation3);
-			Ship ship9 = new Ship("Submarine",gamePlayer4,shipLocation4);
-			Ship ship10 = new Ship("Destroyer",gamePlayer5,shipLocation5);
+			Ship ship6 = new Ship("Battleship",gamePlayer6,shipLocation1);
+			Ship ship7 = new Ship("Patrol boat",gamePlayer2,shipLocation3);
+			Ship ship8 = new Ship("Carrier",gamePlayer3,shipLocation2);
+			Ship ship9 = new Ship("Submarine",gamePlayer4,shipLocation1);
+			Ship ship10 = new Ship("Destroyer",gamePlayer5,shipLocation2);
 			Ship ship11 = new Ship("Patrol boat",gamePlayer6,shipLocation5);
 			Ship ship12 = new Ship("Battleship",gamePlayer7,shipLocation1);
 			Ship ship13 = new Ship("Carrier",gamePlayer8,shipLocation2);
-			Ship ship14 = new Ship("Battleship",gamePlayer6,shipLocation3);
+			Ship ship14 = new Ship("Battleship",gamePlayer1,shipLocation3);
 			Ship ship15 = new Ship("Submarine",gamePlayer7,shipLocation4);
 			Ship ship16 = new Ship("Destroyer",gamePlayer8,shipLocation5);
 
