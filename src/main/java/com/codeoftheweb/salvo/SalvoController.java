@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -125,53 +126,144 @@ public class SalvoController {
         dto.put("self", getHits(gamePlayer));
         dto.put("opponent", getHits(getOpponent(gamePlayer)));
 
+
+        dto.put("self1", getHits1(gamePlayer,getOpponent(gamePlayer)));
+        dto.put("opponent1", getHits1(getOpponent(gamePlayer),gamePlayer));
+
         //dto.put("opponent", getOpponent(gamePlayer).getShips().stream().map(ship -> ship.getLocations() + ship.getType()));
 
         return dto;
+    }
+    private List<String> longTypeShip(GamePlayer self, GamePlayer opponent) {
+
+        List<String> dto = new ArrayList<>();
+
+        List<String> carrierLocations = new ArrayList<>();
+        List<String> destroyerLocations = new ArrayList<>();
+        List<String> submarineLocations = new ArrayList<>();
+        List<String> patrolboatLocations = new ArrayList<>();
+        List<String> battleshipLocations = new ArrayList<>();
+
+
+        for (Ship ship: self.getShips()){
+
+            switch (ship.getType()) {
+                case "Carrier":
+                    carrierLocations = ship.getLocations();
+                    break;
+                case "Battleship":
+                    battleshipLocations = ship.getLocations();
+                    break;
+                case "Submarine":
+                    submarineLocations = ship.getLocations();
+                    break;
+                case "Destroyer":
+                    destroyerLocations = ship.getLocations();
+                    break;
+                case "Patrol Boat":
+                    patrolboatLocations = ship.getLocations();
+                    break;
+
+            }
+        }
+
+/*        for (Ship ship: opponent.getShips()){
+
+            switch (ship.getType()) {
+                case "Carrier":
+                    carrierLocations = ship.getLocations();
+                    break;
+                case "Battleship":
+                    battleshipLocations = ship.getLocations();
+                    break;
+                case "Submarine":
+                    submarineLocations = ship.getLocations();
+                    break;
+                case "Destroyer":
+                    destroyerLocations = ship.getLocations();
+                    break;
+                case "Patrol Boat":
+                    patrolboatLocations = ship.getLocations();
+                    break;
+
+            }
+        }*/
+
+        dto.add(carrierLocations.toString());
+        dto.add(battleshipLocations.toString());
+        dto.add(submarineLocations.toString());
+        dto.add(destroyerLocations.toString());
+        dto.add(patrolboatLocations.toString());
+
+        return dto;
+    }
+    
+    private Map <String,Object> getHits1 (GamePlayer self, GamePlayer opponent){
+        Map <String,Object> hits = new LinkedHashMap<>();
+        Map<String, Integer> contador = new LinkedHashMap<>();
+        Set<Ship> opponentShips = opponent.getShips();
+
+        for (Ship opponentShip : opponentShips){
+            List<String> opponentShipLocations = opponentShip.getLocations();
+            Set<Salvo> selfSalvoes = self.getSalvoes();
+            for (Salvo selfSalvo : selfSalvoes){
+                List <String> selfSalvoLocations = selfSalvo.getLocations();
+                for (String location : selfSalvoLocations){
+                    if (opponentShipLocations.stream().anyMatch(l -> l.equals(location))){
+                        if (!contador.containsKey(opponentShip.getType())){
+                            contador.put(opponentShip.getType(), opponentShip.getLocations().size() - 1);
+                        } else {
+                            contador.put(opponentShip.getType(), contador.get(opponentShip.getType()) - 1);
+                        }
+
+                        hits.put("turn", self.getSalvoes().stream().findFirst().get().getTurn());
+                        //hitsLocations mis salvos acertados en el ship del oponente
+                        hits.put("hitLocations", salvoesAcertadosPlayer(self.getSalvoes(), opponent.getShips()));
+                        hits.put("misSalvos", self.getSalvoes().stream()
+                                .map(salvo -> salvo.getLocations())
+                                .flatMap(strings -> strings.stream())
+                                .collect(Collectors.toList()));
+                        hits.put("misShips", self.getShips().stream().map(ship -> ship.getType() + " " + ship.getLocations()));
+                        //dto.put("damages", damageHits(gamePlayer));
+                        hits.put("missed", missedSalvoes(self.getSalvoes(), opponent.getShips()));
+                        hits.put(opponentShip.getType() + " - " + "Hits para hundir al oponente" ,contador.get(opponentShip.getType()));
+                        hits.put("LongShips", longTypeShip(self,opponent));
+
+                    }
+                }
+            }
+        }
+
+        hits.put("hitLocations", salvoesAcertadosPlayer(self.getSalvoes(), opponent.getShips()));
+
+        return hits;
     }
 
     private Map<String, Object> getHits(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
 
 
-        dto.put("turn", gamePlayer.getSalvoes().stream().findFirst().get().getTurn());
-        //hitsLocations mis salvos acertados en el ship del oponente
-        dto.put("hitLocations", salvoesAcertadosPlayer(gamePlayer.getSalvoes(),getOpponent(gamePlayer).getShips()));
-        dto.put("misSalvos", gamePlayer.getSalvoes().stream().findFirst().get().getLocations());
-        dto.put("misShips", gamePlayer.getShips().stream().map(ship -> ship.getType() + " " + ship.getLocations()));
-        //dto.put("damages", damageHits(gamePlayer));
-        dto.put("missed", missedSalvoes(gamePlayer.getSalvoes(),getOpponent(gamePlayer).getShips()));
-
-
-        return dto;
-    }
-
- /*   private Map<String, Object> damageHits(GamePlayer gamePlayer) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-
-        //dto.put("carrierHits", getCarrier);
-        dto.put("patrolboatHits",getPatrolBoatHits(gamePlayer));
+            dto.put("turn", gamePlayer.getSalvoes().stream().findFirst().get().getTurn());
+            //hitsLocations mis salvos acertados en el ship del oponente
+            dto.put("hitLocations", salvoesAcertadosPlayer(gamePlayer.getSalvoes(), getOpponent(gamePlayer).getShips()));
+            dto.put("misSalvos", gamePlayer.getSalvoes().stream()
+                                                        .map(salvo -> salvo.getLocations())
+                                                        .flatMap(strings -> strings.stream())
+                                                        .collect(Collectors.toList()));
+            dto.put("misShips", gamePlayer.getShips().stream().map(ship -> ship.getType() + " " + ship.getLocations()));
+            //dto.put("damages", damageHits(gamePlayer));
+            dto.put("missed", missedSalvoes(gamePlayer.getSalvoes(), getOpponent(gamePlayer).getShips()));
+            
 
         return dto;
+
     }
 
-    public int getPatrolBoatHits(GamePlayer gamePlayer){
-
-        getOpponent(gamePlayer).getShips().stream().map(ship -> ship.getType()).collect(Collectors.toList());
-
-
-    }*/
 
     public int missedSalvoes(Set<Salvo> salvoes,Set<Ship> ships) {
 
         List<String> salvoLocations =  salvoes.stream().map(salvo -> salvo.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
         List<String> shipLocations =  ships.stream().map(ship -> ship.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
-
-/*        for (String t : salvoLocations) {
-            if(shipLocations.contains(t)) {
-                acertados.add(t);
-            }
-        }*/
 
         List<String> salvoesAcertados = salvoLocations.stream()
                 .filter(shipLocations::contains)

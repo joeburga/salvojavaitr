@@ -209,8 +209,8 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Salvo salvo4 = new Salvo(gamePlayer4,2,salvoLocation7);
 			Salvo salvo5 = new Salvo(gamePlayer5,1,salvoLocation3);
 			Salvo salvo6 = new Salvo(gamePlayer6,1,salvoLocation8);
-			Salvo salvo7 = new Salvo(gamePlayer7,2,salvoLocation4);
-			Salvo salvo8 = new Salvo(gamePlayer8,2,salvoLocation9);
+			Salvo salvo7 = new Salvo(gamePlayer2,2,salvoLocation4);
+			Salvo salvo8 = new Salvo(gamePlayer1,2,salvoLocation9);
 
 
 			salvoRepository.save(salvo1);
