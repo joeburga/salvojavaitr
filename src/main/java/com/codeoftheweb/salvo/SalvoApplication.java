@@ -123,15 +123,15 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			Ship ship1 = new Ship("Destroyer",gamePlayer1,shipLocation1);
 			Ship ship2 = new Ship("Submarine",gamePlayer2,shipLocation2);
-			Ship ship3 = new Ship("Patrol boat",gamePlayer3,shipLocation3);
+			Ship ship3 = new Ship("PatrolBoat",gamePlayer3,shipLocation3);
 			Ship ship4 = new Ship("Carrier",gamePlayer4,shipLocation4);
 			Ship ship5 = new Ship("Battleship",gamePlayer5,shipLocation5);
 			Ship ship6 = new Ship("Battleship",gamePlayer6,shipLocation1);
-			Ship ship7 = new Ship("Patrol boat",gamePlayer2,shipLocation3);
+			Ship ship7 = new Ship("PatrolBoat",gamePlayer2,shipLocation3);
 			Ship ship8 = new Ship("Carrier",gamePlayer3,shipLocation2);
 			Ship ship9 = new Ship("Submarine",gamePlayer4,shipLocation1);
 			Ship ship10 = new Ship("Destroyer",gamePlayer5,shipLocation2);
-			Ship ship11 = new Ship("Patrol boat",gamePlayer6,shipLocation5);
+			Ship ship11 = new Ship("PatrolBoat",gamePlayer6,shipLocation5);
 			Ship ship12 = new Ship("Battleship",gamePlayer7,shipLocation1);
 			Ship ship13 = new Ship("Carrier",gamePlayer8,shipLocation2);
 			Ship ship14 = new Ship("Battleship",gamePlayer1,shipLocation3);
@@ -162,8 +162,8 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			salvoLocation1.add("F1");
 
 			List<String> salvoLocation2 = new ArrayList<>();
-			salvoLocation2.add("F2");
-			salvoLocation2.add("D5");
+			salvoLocation2.add("F5");
+			salvoLocation2.add("F6");
 
 			List<String> salvoLocation3 = new ArrayList<>();
 			salvoLocation3.add("A2");
@@ -204,13 +204,13 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			salvoLocation10.add("H3");
 
 			Salvo salvo1 = new Salvo(gamePlayer1,1,salvoLocation1);
-			Salvo salvo2 = new Salvo(gamePlayer2,1,salvoLocation6);
+			Salvo salvo2 = new Salvo(gamePlayer2,2,salvoLocation6);
 			Salvo salvo3 = new Salvo(gamePlayer3,2,salvoLocation2);
 			Salvo salvo4 = new Salvo(gamePlayer4,2,salvoLocation7);
 			Salvo salvo5 = new Salvo(gamePlayer5,1,salvoLocation3);
 			Salvo salvo6 = new Salvo(gamePlayer6,1,salvoLocation8);
-			Salvo salvo7 = new Salvo(gamePlayer2,2,salvoLocation4);
-			Salvo salvo8 = new Salvo(gamePlayer1,2,salvoLocation9);
+			Salvo salvo7 = new Salvo(gamePlayer2,1,salvoLocation10);
+			Salvo salvo8 = new Salvo(gamePlayer1,2,salvoLocation2);
 
 
 			salvoRepository.save(salvo1);
@@ -229,22 +229,22 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Score score1 = new Score(game1,player1,win,date4);
 			Score score2 = new Score(game1,player2,win,date1);
 			Score score3 = new Score(game2,player3,win,date2);
-            Score score4 = new Score(game2,player2,draw,date2);
-            Score score5 = new Score(game3,player3,loss,date2);
-            Score score6 = new Score(game3,player1,win,date2);
+			Score score4 = new Score(game2,player2,draw,date2);
+			Score score5 = new Score(game3,player3,loss,date2);
+			Score score6 = new Score(game3,player1,win,date2);
 			Score score7 = new Score(game4,player4,draw,date2);
 			Score score8 = new Score(game4,player1,win,date2);
 
-            scoreRepository.save(score1);
+			scoreRepository.save(score1);
 			scoreRepository.save(score2);
 			scoreRepository.save(score3);
-            scoreRepository.save(score4);
-            scoreRepository.save(score5);
-            scoreRepository.save(score6);
+			scoreRepository.save(score4);
+			scoreRepository.save(score5);
+			scoreRepository.save(score6);
 			scoreRepository.save(score7);
 			scoreRepository.save(score8);
 
-        };
+		};
 	}
 
 }
@@ -273,41 +273,41 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 @Configuration
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests()
-					.antMatchers( "/web/games_3.html").permitAll()
-					.antMatchers( "/web/**").permitAll()
-					.antMatchers( "/api/games.").permitAll()
-					.antMatchers( "/api/players").permitAll()
-					.antMatchers( "/api/game_view/**").hasAuthority("USER")
-					.antMatchers( "/rest/*").denyAll()
-					.anyRequest().permitAll();
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+				.antMatchers( "/web/games_3.html").permitAll()
+				.antMatchers( "/web/**").permitAll()
+				.antMatchers( "/api/games.").permitAll()
+				.antMatchers( "/api/players").permitAll()
+				.antMatchers( "/api/game_view/**").hasAuthority("USER")
+				.antMatchers( "/rest/*").denyAll()
+				.anyRequest().permitAll();
 
-			http.formLogin()
-					.usernameParameter("email")
-					.passwordParameter("password")
-					.loginPage("/api/login");
+		http.formLogin()
+				.usernameParameter("email")
+				.passwordParameter("password")
+				.loginPage("/api/login");
 
-			http.logout().logoutUrl("/api/logout");
+		http.logout().logoutUrl("/api/logout");
 
-			// VER BASE DE DATOS H2
-			http.headers().frameOptions().sameOrigin();
+		// VER BASE DE DATOS H2
+		http.headers().frameOptions().sameOrigin();
 
-			http.csrf().disable();
+		http.csrf().disable();
 
-			// if user is not authenticated, just send an authentication failure response
-			http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+		// if user is not authenticated, just send an authentication failure response
+		http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
-			// if login is successful, just clear the flags asking for authentication
-			http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
+		// if login is successful, just clear the flags asking for authentication
+		http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
 
-			// if login fails, just send an authentication failure response
-			http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+		// if login fails, just send an authentication failure response
+		http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
-			// if logout is successful, just send a success response
-			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
-		}
+		// if logout is successful, just send a success response
+		http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+	}
 
 
 	private void clearAuthenticationAttributes(HttpServletRequest request) {
