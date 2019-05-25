@@ -1,7 +1,7 @@
 // var player1 = "p1_";
 // var player2 = "p2_";
-postShipLocations(makePostUrl());
-postSalvo(makePostUrlSalvoes());
+//postShipLocations(makePostUrl());
+//postSalvo(makePostUrlSalvoes());
 var gamePlayerData = {};
 var errorMsg;
 var you = "";
@@ -172,10 +172,12 @@ function showSelf (gamePlayerData) {
     gamePlayerData.gamePlayers.forEach(function(gamePlayer) {
             //Prueba: Cambie gamePlayer.id por gamePlayer.gpid
         if (gamePlayer.gpid == getParameterByName("gp")) {
-            you = gamePlayer.player.email;
+            //Cambie gamePlayer.player.email por gamePlayer.player.username para mostrar nombre en la grilla
+            you = gamePlayer.player.username;
             youID = gamePlayer.player.id;
         } else {
-            viewer = gamePlayer.player.email;
+            //Cambie gamePlayer.player.email por gamePlayer.player.username para mostrar nombre en la grilla
+            viewer = gamePlayer.player.username;
             $('#OpponentPlayerName').removeClass('waitingPlayer');
         }
     });
@@ -295,8 +297,8 @@ function postShipLocations (postUrl) {
     $.post({
         url: postUrl,
         //Para ver los ships en el task 3 y agrego JSON.stringify
-        //data: shipsJSON,
-        data: JSON.stringify([{type: "destroyer", locations: ["A1", "A2", "A3"]},{type: "destroyer", locations: ["A1", "A2", "A3"]}]),
+        data: shipsJSON,
+        //data: JSON.stringify([{type: "destroyer", locations: ["A1", "A2", "A3"]},{type: "destroyer", locations: ["A1", "A2", "A3"]}]),
         dataType: "text",
         contentType: "application/json"
     })
@@ -323,8 +325,8 @@ function postShipLocations (postUrl) {
 function postSalvo (postUrl) {
     $.post({
         url: postUrl,
-        //data: salvoJSON,
-        data: JSON.stringify({turn: 3, locations: ["A1", "A2", "A3"]}),
+        data: salvoJSON,
+        //data: JSON.stringify({turn: 3, locations: ["A1", "A2", "A3"]}),
         dataType: "text",
         contentType: "application/json"
     })
