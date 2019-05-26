@@ -41,9 +41,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository,
-									  GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository,
-									  SalvoRepository salvoRepository, ScoreRepository scoreRepository) {
+	public CommandLineRunner initData(PlayerRepository playerRepository,
+                                      GameRepository gameRepository,
+									  GamePlayerRepository gamePlayerRepository,
+                                      ShipRepository shipRepository,
+									  SalvoRepository salvoRepository,
+                                      ScoreRepository scoreRepository) {
 		return (args) -> {
 
 			Player player1 = new Player("Jack Bauer","j.bauer@ctu.gov",passwordEncoder().encode("24"));
@@ -52,18 +55,17 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Player player4 = new Player("Tony Almeida","t.almeida@ctu.gov",passwordEncoder().encode("mole"));
 
 
-			Date date1 = new Date();
-			Date date2 = new Date();
-			Date date3 = new Date();
-			Date date4 = new Date();
+			Date date = new Date();
+			int hora = 3600;
 
 			//date = Date.from(date.toInstant().plusSeconds(3600));
-			Game game1 = new Game(Date.from(date1.toInstant().plusSeconds(3600)));
-			Game game2 = new Game(Date.from(date2.toInstant().plusSeconds(7200)));
-			Game game3 = new Game(Date.from(date3.toInstant().plusSeconds(10800)));
-			Game game4 = new Game(Date.from(date4.toInstant().plusSeconds(14400)));
+			Game game1 = new Game(Date.from(date.toInstant().plusSeconds(hora)));
+			Game game2 = new Game(Date.from(date.toInstant().plusSeconds(hora * 2)));
+			Game game3 = new Game(Date.from(date.toInstant().plusSeconds(hora * 3)));
+			Game game4 = new Game(Date.from(date.toInstant().plusSeconds(hora * 4)));
+			Game game5 = new Game(Date.from(date.toInstant().plusSeconds(hora * 5)));
+			Game game6 = new Game(Date.from(date.toInstant().plusSeconds(hora * 6)));
 
-			// save a couple of Players
 			playerRepository.save(player1);
 			playerRepository.save(player2);
 			playerRepository.save(player3);
@@ -73,16 +75,21 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gameRepository.save(game2);
 			gameRepository.save(game3);
 			gameRepository.save(game4);
+			gameRepository.save(game5);
+			gameRepository.save(game6);
 
 			GamePlayer gamePlayer1 = new GamePlayer(game1,player1);
 			GamePlayer gamePlayer2 = new GamePlayer(game1,player2);
-			GamePlayer gamePlayer3 = new GamePlayer(game2,player4);
-			GamePlayer gamePlayer4 = new GamePlayer(game2,player1);
-			GamePlayer gamePlayer5 = new GamePlayer(game3,player3);
-			GamePlayer gamePlayer6 = new GamePlayer(game3,player2);
-			GamePlayer gamePlayer7 = new GamePlayer(game4,player4);
+			GamePlayer gamePlayer3 = new GamePlayer(game2,player1);
+			GamePlayer gamePlayer4 = new GamePlayer(game2,player2);
+			GamePlayer gamePlayer5 = new GamePlayer(game3,player2);
+			GamePlayer gamePlayer6 = new GamePlayer(game3,player4);
+			GamePlayer gamePlayer7 = new GamePlayer(game4,player2);
 			GamePlayer gamePlayer8 = new GamePlayer(game4,player1);
-
+			GamePlayer gamePlayer9 = new GamePlayer(game5,player4);
+			GamePlayer gamePlayer10 = new GamePlayer(game5,player1);
+			GamePlayer gamePlayer11 = new GamePlayer(game6,player3);
+			//GamePlayer gamePlayer12 = new GamePlayer(game6,SIN OPONENTE);
 
 			gamePlayerRepository.save(gamePlayer1);
 			gamePlayerRepository.save(gamePlayer2);
@@ -92,51 +99,84 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayerRepository.save(gamePlayer6);
 			gamePlayerRepository.save(gamePlayer7);
 			gamePlayerRepository.save(gamePlayer8);
+			gamePlayerRepository.save(gamePlayer9);
+			gamePlayerRepository.save(gamePlayer10);
+			gamePlayerRepository.save(gamePlayer11);
 
 
 			List<String> shipLocation1 = new ArrayList<>();
 			shipLocation1.add("H2");
 			shipLocation1.add("H3");
 			shipLocation1.add("H4");
-
-			List<String> shipLocation2 = new ArrayList<>();
-			shipLocation2.add("F3");
-			shipLocation2.add("F4");
-			shipLocation2.add("F5");
-
 			List<String> shipLocation3 = new ArrayList<>();
-			shipLocation3.add("B4");
-			shipLocation3.add("B5");
+			shipLocation3.add("E1");
+			shipLocation3.add("F1");
+			shipLocation3.add("G1");
+			List<String> shipLocation7 = new ArrayList<>();
+			shipLocation7.add("B5");
+			shipLocation7.add("C5");
+			shipLocation7.add("D5");
+			List<String> shipLocation9 = new ArrayList<>();
+			shipLocation9.add("A2");
+			shipLocation9.add("A3");
+			shipLocation9.add("A4");
 
 			List<String> shipLocation4 = new ArrayList<>();
-			shipLocation4.add("A1");
-			shipLocation4.add("A2");
-			shipLocation4.add("A3");
-			shipLocation4.add("A4");
-			shipLocation4.add("A5");
+			shipLocation4.add("B1");
+			shipLocation4.add("C1");
+			shipLocation4.add("D1");
+			shipLocation4.add("E1");
 
 			List<String> shipLocation5 = new ArrayList<>();
-			shipLocation5.add("B1");
-			shipLocation5.add("C1");
-			shipLocation5.add("D1");
-			shipLocation5.add("E1");
+			shipLocation5.add("A1");
+			shipLocation5.add("A2");
+			shipLocation5.add("A3");
+			shipLocation5.add("A4");
+			shipLocation5.add("A5");
 
+			List<String> shipLocation2 = new ArrayList<>();
+			shipLocation2.add("B4");
+			shipLocation2.add("B5");
+			List<String> shipLocation6 = new ArrayList<>();
+			shipLocation6.add("F1");
+			shipLocation6.add("F2");
+			List<String> shipLocation8 = new ArrayList<>();
+			shipLocation8.add("C6");
+			shipLocation8.add("C7");
+			List<String> shipLocation10 = new ArrayList<>();
+			shipLocation10.add("G6");
+			shipLocation10.add("H6");
+
+			// Ordenado por GAMEs.
 			Ship ship1 = new Ship("Destroyer",gamePlayer1,shipLocation1);
-			Ship ship2 = new Ship("Submarine",gamePlayer2,shipLocation2);
-			Ship ship3 = new Ship("PatrolBoat",gamePlayer3,shipLocation3);
-			Ship ship4 = new Ship("Carrier",gamePlayer4,shipLocation4);
-			Ship ship5 = new Ship("Battleship",gamePlayer5,shipLocation5);
-			Ship ship6 = new Ship("Battleship",gamePlayer6,shipLocation1);
-			Ship ship7 = new Ship("PatrolBoat",gamePlayer2,shipLocation3);
-			Ship ship8 = new Ship("Carrier",gamePlayer3,shipLocation2);
-			Ship ship9 = new Ship("Submarine",gamePlayer4,shipLocation1);
-			Ship ship10 = new Ship("Destroyer",gamePlayer5,shipLocation2);
-			Ship ship11 = new Ship("PatrolBoat",gamePlayer6,shipLocation5);
-			Ship ship12 = new Ship("Battleship",gamePlayer7,shipLocation1);
-			Ship ship13 = new Ship("Carrier",gamePlayer8,shipLocation2);
-			Ship ship14 = new Ship("Battleship",gamePlayer1,shipLocation3);
-			Ship ship15 = new Ship("Submarine",gamePlayer7,shipLocation4);
-			Ship ship16 = new Ship("Destroyer",gamePlayer8,shipLocation5);
+			Ship ship2 = new Ship("Submarine",gamePlayer1,shipLocation3);
+			Ship ship3 = new Ship("PatrolBoat",gamePlayer1,shipLocation2);
+			Ship ship4 = new Ship("Destroyer",gamePlayer2,shipLocation7);
+			Ship ship5 = new Ship("PatrolBoat",gamePlayer2,shipLocation6);
+
+			Ship ship6 = new Ship("Destroyer",gamePlayer3,shipLocation7);
+			Ship ship7 = new Ship("PatrolBoat",gamePlayer3,shipLocation8);
+			Ship ship8 = new Ship("Submarine",gamePlayer4,shipLocation9);
+			Ship ship9 = new Ship("PatrolBoat",gamePlayer4,shipLocation10);
+
+			Ship ship10 = new Ship("Destroyer",gamePlayer5,shipLocation7);
+			Ship ship11 = new Ship("PatrolBoat",gamePlayer5,shipLocation8);
+			Ship ship12 = new Ship("Submarine",gamePlayer6,shipLocation9);
+			Ship ship13 = new Ship("PatrolBoat",gamePlayer6,shipLocation10);
+
+			Ship ship14 = new Ship("Destroyer",gamePlayer7,shipLocation7);
+			Ship ship15 = new Ship("PatrolBoat",gamePlayer7,shipLocation8);
+			Ship ship16 = new Ship("Submarine",gamePlayer8,shipLocation9);
+			Ship ship17 = new Ship("PatrolBoat",gamePlayer8,shipLocation10);
+
+			// Diferente al salvo-testbed.
+			Ship ship18 = new Ship("Carrier",gamePlayer9,shipLocation5);
+			Ship ship19 = new Ship("Battleship",gamePlayer9,shipLocation4);
+			Ship ship20 = new Ship("Submarine",gamePlayer10,shipLocation1);
+			Ship ship21 = new Ship("Battleship",gamePlayer10,shipLocation4);
+
+			Ship ship22 = new Ship("Carrier",gamePlayer11,shipLocation5);
+			Ship ship23 = new Ship("Battleship",gamePlayer11,shipLocation4);
 
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
@@ -154,6 +194,13 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipRepository.save(ship14);
 			shipRepository.save(ship15);
 			shipRepository.save(ship16);
+			shipRepository.save(ship17);
+			shipRepository.save(ship18);
+			shipRepository.save(ship19);
+			shipRepository.save(ship20);
+			shipRepository.save(ship21);
+			shipRepository.save(ship22);
+			shipRepository.save(ship23);
 
 
 			List<String> salvoLocation1 = new ArrayList<>();
@@ -162,8 +209,8 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			salvoLocation1.add("F1");
 
 			List<String> salvoLocation2 = new ArrayList<>();
-			salvoLocation2.add("F5");
-			salvoLocation2.add("F6");
+			salvoLocation2.add("F2");
+			salvoLocation2.add("D5");
 
 			List<String> salvoLocation3 = new ArrayList<>();
 			salvoLocation3.add("A2");
@@ -171,8 +218,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			salvoLocation3.add("G6");
 
 			List<String> salvoLocation4 = new ArrayList<>();
-			salvoLocation4.add("A3");
-			salvoLocation4.add("H6");
+			salvoLocation4.add("H1");
+			salvoLocation4.add("H2");
+			salvoLocation4.add("H3");
 
 			List<String> salvoLocation5 = new ArrayList<>();
 			salvoLocation5.add("G6");
@@ -199,19 +247,89 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			salvoLocation9.add("C6");
 
 			List<String> salvoLocation10 = new ArrayList<>();
-			salvoLocation10.add("H1");
-			salvoLocation10.add("H2");
-			salvoLocation10.add("H3");
+			salvoLocation10.add("A3");
+			salvoLocation10.add("H6");
 
+			List<String> salvoLocation11 = new ArrayList<>();
+			salvoLocation11.add("A2");
+			salvoLocation11.add("A3");
+			salvoLocation11.add("D8");
+
+			List<String> salvoLocation12 = new ArrayList<>();
+			salvoLocation12.add("E1");
+			salvoLocation12.add("F2");
+			salvoLocation12.add("G3");
+
+			List<String> salvoLocation13 = new ArrayList<>();
+			salvoLocation13.add("A3");
+			salvoLocation13.add("A4");
+			salvoLocation13.add("F7");
+
+			List<String> salvoLocation14 = new ArrayList<>();
+			salvoLocation14.add("B5");
+			salvoLocation14.add("C6");
+			salvoLocation14.add("H1");
+
+			List<String> salvoLocation15 = new ArrayList<>();
+			salvoLocation15.add("A2");
+			salvoLocation15.add("G6");
+			salvoLocation15.add("H6");
+
+			List<String> salvoLocation16 = new ArrayList<>();
+			salvoLocation16.add("C5");
+			salvoLocation16.add("C7");
+			salvoLocation16.add("D5");
+
+			List<String> salvoLocation17 = new ArrayList<>();
+			salvoLocation17.add("A1");
+			salvoLocation17.add("A2");
+			salvoLocation17.add("A3");
+
+			List<String> salvoLocation18 = new ArrayList<>();
+			salvoLocation18.add("B5");
+			salvoLocation18.add("B6");
+			salvoLocation18.add("C7");
+
+			List<String> salvoLocation19 = new ArrayList<>();
+			salvoLocation19.add("G6");
+			salvoLocation19.add("G5");
+			salvoLocation19.add("G8");
+
+			List<String> salvoLocation20 = new ArrayList<>();
+			salvoLocation20.add("C6");
+			salvoLocation20.add("D6");
+			salvoLocation20.add("E6");
+
+			List<String> salvoLocation21 = new ArrayList<>();
+			salvoLocation21.add("H1");
+			salvoLocation21.add("H8");
+
+			// Ordenado por GAMEs y TURNs.
 			Salvo salvo1 = new Salvo(gamePlayer1,1,salvoLocation1);
-			Salvo salvo2 = new Salvo(gamePlayer2,2,salvoLocation6);
-			Salvo salvo3 = new Salvo(gamePlayer3,2,salvoLocation2);
-			Salvo salvo4 = new Salvo(gamePlayer4,2,salvoLocation7);
-			Salvo salvo5 = new Salvo(gamePlayer5,1,salvoLocation3);
-			Salvo salvo6 = new Salvo(gamePlayer6,1,salvoLocation8);
-			Salvo salvo7 = new Salvo(gamePlayer2,1,salvoLocation10);
-			Salvo salvo8 = new Salvo(gamePlayer1,2,salvoLocation2);
+			Salvo salvo2 = new Salvo(gamePlayer2,1,salvoLocation6);
+			Salvo salvo3 = new Salvo(gamePlayer1,2,salvoLocation2);
+			Salvo salvo4 = new Salvo(gamePlayer2,2,salvoLocation7);
 
+			Salvo salvo5 = new Salvo(gamePlayer3,1,salvoLocation3);
+			Salvo salvo6 = new Salvo(gamePlayer4,1,salvoLocation8);
+			Salvo salvo7 = new Salvo(gamePlayer3,2,salvoLocation10);
+			Salvo salvo8 = new Salvo(gamePlayer4,2,salvoLocation9);
+
+			Salvo salvo9 = new Salvo(gamePlayer5,1,salvoLocation5);
+			Salvo salvo10 = new Salvo(gamePlayer6,1,salvoLocation4);
+			Salvo salvo11 = new Salvo(gamePlayer5,2,salvoLocation11);
+			Salvo salvo12 = new Salvo(gamePlayer6,2,salvoLocation12);
+
+			Salvo salvo13 = new Salvo(gamePlayer7,1,salvoLocation13);
+			Salvo salvo14 = new Salvo(gamePlayer8,1,salvoLocation14);
+			Salvo salvo15 = new Salvo(gamePlayer7,2,salvoLocation15);
+			Salvo salvo16 = new Salvo(gamePlayer8,2,salvoLocation16);
+
+			Salvo salvo17 = new Salvo(gamePlayer9,1,salvoLocation17);
+			Salvo salvo18 = new Salvo(gamePlayer10,1,salvoLocation18);
+			Salvo salvo19 = new Salvo(gamePlayer9,2,salvoLocation19);
+			Salvo salvo20 = new Salvo(gamePlayer10,2,salvoLocation20);
+			Salvo salvo21 = new Salvo(gamePlayer10,3,salvoLocation21);
 
 			salvoRepository.save(salvo1);
 			salvoRepository.save(salvo2);
@@ -221,19 +339,32 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			salvoRepository.save(salvo6);
 			salvoRepository.save(salvo7);
 			salvoRepository.save(salvo8);
+			salvoRepository.save(salvo9);
+			salvoRepository.save(salvo10);
+			salvoRepository.save(salvo11);
+			salvoRepository.save(salvo12);
+			salvoRepository.save(salvo13);
+			salvoRepository.save(salvo14);
+			salvoRepository.save(salvo15);
+			salvoRepository.save(salvo16);
+			salvoRepository.save(salvo17);
+			salvoRepository.save(salvo18);
+			salvoRepository.save(salvo19);
+			salvoRepository.save(salvo20);
+			salvoRepository.save(salvo21);
 
 			float win = 1;
 			float loss = 0;
 			float draw = (float)0.5;
 
-			Score score1 = new Score(game1,player1,win,date4);
-			Score score2 = new Score(game1,player2,win,date1);
-			Score score3 = new Score(game2,player3,win,date2);
-			Score score4 = new Score(game2,player2,draw,date2);
-			Score score5 = new Score(game3,player3,loss,date2);
-			Score score6 = new Score(game3,player1,win,date2);
-			Score score7 = new Score(game4,player4,draw,date2);
-			Score score8 = new Score(game4,player1,win,date2);
+			Score score1 = new Score(game1,player1,win,date);
+			Score score2 = new Score(game1,player2,loss,date);
+			Score score3 = new Score(game2,player1,draw,date);
+			Score score4 = new Score(game2,player2,draw,date);
+			Score score5 = new Score(game3,player2,win,date);
+			Score score6 = new Score(game3,player4,loss,date);
+			Score score7 = new Score(game4,player2,draw,date);
+			Score score8 = new Score(game4,player1,draw,date);
 
 			scoreRepository.save(score1);
 			scoreRepository.save(score2);
@@ -249,6 +380,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 }
 
+/**
+ * Configuración de las autorizaciones y roles de los usuarios.
+ */
 @Configuration
 class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
@@ -269,6 +403,10 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 	}
 }
 
+/**
+ * Configuración de las URLs con permisos,
+ * Configuración login y logout.
+ */
 @EnableWebSecurity
 @Configuration
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -292,8 +430,10 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.logout().logoutUrl("/api/logout");
 
 		// VER BASE DE DATOS H2
-		http.headers().frameOptions().sameOrigin();
+        // Ir application.properties para ver las properties agregadas.
+        http.headers().frameOptions().sameOrigin();
 
+        // turn off checking for CSRF tokens
 		http.csrf().disable();
 
 		// if user is not authenticated, just send an authentication failure response
