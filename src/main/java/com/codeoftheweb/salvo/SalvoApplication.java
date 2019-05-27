@@ -59,12 +59,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			int hora = 3600;
 
 			//date = Date.from(date.toInstant().plusSeconds(3600));
-			Game game1 = new Game(Date.from(date.toInstant().plusSeconds(hora)));
-			Game game2 = new Game(Date.from(date.toInstant().plusSeconds(hora * 2)));
-			Game game3 = new Game(Date.from(date.toInstant().plusSeconds(hora * 3)));
-			Game game4 = new Game(Date.from(date.toInstant().plusSeconds(hora * 4)));
-			Game game5 = new Game(Date.from(date.toInstant().plusSeconds(hora * 5)));
-			Game game6 = new Game(Date.from(date.toInstant().plusSeconds(hora * 6)));
+			Game game1 = new Game(Date.from(date.toInstant().plusSeconds(0)));
+			Game game2 = new Game(Date.from(date.toInstant().plusSeconds(hora)));
+			Game game3 = new Game(Date.from(date.toInstant().plusSeconds(hora * 2)));
+			Game game4 = new Game(Date.from(date.toInstant().plusSeconds(hora * 3)));
+			Game game5 = new Game(Date.from(date.toInstant().plusSeconds(hora * 4)));
+			Game game6 = new Game(Date.from(date.toInstant().plusSeconds(hora * 5)));
 
 			playerRepository.save(player1);
 			playerRepository.save(player2);
@@ -357,14 +357,27 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			float loss = 0;
 			float draw = (float)0.5;
 
-			Score score1 = new Score(game1,player1,win,date);
-			Score score2 = new Score(game1,player2,loss,date);
-			Score score3 = new Score(game2,player1,draw,date);
-			Score score4 = new Score(game2,player2,draw,date);
-			Score score5 = new Score(game3,player2,win,date);
-			Score score6 = new Score(game3,player4,loss,date);
-			Score score7 = new Score(game4,player2,draw,date);
-			Score score8 = new Score(game4,player1,draw,date);
+			// finishDate media hora después de haber empezado el Game.
+			Date finishDateGame1 = Date.from(game1.getDate().toInstant().plusSeconds(1800));
+			Date finishDateGame2 = Date.from(game2.getDate().toInstant().plusSeconds(1800));
+			Date finishDateGame3 = Date.from(game3.getDate().toInstant().plusSeconds(1800));
+			Date finishDateGame4 = Date.from(game4.getDate().toInstant().plusSeconds(1800));
+			Date finishDateGame5 = Date.from(game5.getDate().toInstant().plusSeconds(1800));
+			Date finishDateGame6 = Date.from(game6.getDate().toInstant().plusSeconds(1800));
+
+			Score score1 = new Score(game1,player1,win,finishDateGame1);
+			Score score2 = new Score(game1,player2,loss,finishDateGame1);
+			Score score3 = new Score(game2,player1,draw,finishDateGame2);
+			Score score4 = new Score(game2,player2,draw,finishDateGame2);
+			Score score5 = new Score(game3,player2,win,finishDateGame3);
+			Score score6 = new Score(game3,player4,loss,finishDateGame3);
+			Score score7 = new Score(game4,player2,draw,finishDateGame4);
+			Score score8 = new Score(game4,player1,draw,finishDateGame4);
+
+			//Score score9 = new Score(game5,player4,SIN DEFINIR,finishDateGame5);
+			//Score score10 = new Score(game5,player1,SIN DEFINIR,finishDateGame5);
+			//Score score11 = new Score(game6,player3,SIN DEFINIR,finishDateGame6);
+			//Score score12 = new Score(game6,SIN OPONENTE,SIN DEFINIR,finishDateGame6);
 
 			scoreRepository.save(score1);
 			scoreRepository.save(score2);
