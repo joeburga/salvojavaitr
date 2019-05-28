@@ -33,7 +33,8 @@ public class SalvoController {
     private ShipRepository shipRepository;
     @Autowired
     private SalvoRepository salvoRepository;
-
+    @Autowired
+    private ScoreRepository scoreRepository;
 
     /* ######################## MÉTODOS AUXILIARES ######################## */
 
@@ -159,102 +160,247 @@ public class SalvoController {
 
     private String getGameState(GamePlayer self, GamePlayer opponent){
 
-        if (self.getShips().size() == 0){
+        Set<Ship> selfShips = self.getShips();
+        Set<Salvo> selfSalvoes = self.getSalvoes();
+
+        Set<Ship> opponentShips = opponent.getShips();
+        Set<Salvo> opponentSalvoes = opponent.getSalvoes();
+
+        if (selfShips.size() == 0){
             return "PLACESHIPS";
         }
-        if (opponent == null || opponent.getShips().size() == 0){
+        if (opponentShips == null){
             return "WAITINGFOROPP";
         }
-        if (opponent.getShips().size() == 0){
+        if (opponentShips.size() == 0){
             return "WAIT";
         }
 
-        if (self.getSalvoes().size() == opponent.getSalvoes().size()){
+        int currentTurn = currentTurnGame(self,opponent);
 
-            if (allShipsSunk(self.getShips(),opponent.getSalvoes()) && allShipsSunk(opponent.getShips(),self.getSalvoes())){
+/*        if (self.getSalvoes().isEmpty() && opponent.getSalvoes().isEmpty()){
+            return "PLAY";
+        } else {
+            System.out.println(self.getSalvoes());
 
-                    return "TIE";
+            int cantSelfSalvoes = self.getSalvoes().size();
+            int cantOpponentSalvoes = opponent.getSalvoes().size();
+
+            System.out.println(cantOpponentSalvoes);
+            System.out.println(cantSelfSalvoes);
+
+            if (cantSelfSalvoes > cantOpponentSalvoes) {
+                return "WAITINGFOROPP";
+
+            } else if (cantSelfSalvoes < cantOpponentSalvoes) {
+                return "PLAY";
+
+            } else {
+                if (self.getSalvoes().size() == opponent.getSalvoes().size()) {
+
+                    if (allShipsSunk(self.getShips(), opponent.getSalvoes()) && allShipsSunk(opponent.getShips(), self.getSalvoes())) {
+                        return "TIE";
+                    }
+                    if (allShipsSunk(self.getShips(), opponent.getSalvoes())) {
+                        return "LOST";
+                    }
+                    if (allShipsSunk(opponent.getShips(), self.getSalvoes())) {
+                        return "WON";
+                    }
+                }
             }
-            if (allShipsSunk(self.getShips(),opponent.getSalvoes())){
-
+        }*/
+        if(selfSalvoes.size() == opponentSalvoes.size()){
+            Player selfPlayer = self.getPlayer();
+            Game game = self.getGame();
+            if (allShipsSunk(selfShips, opponentSalvoes) && allShipsSunk(opponentShips, selfSalvoes)){
+                Score score = new Score(game,selfPlayer, 0.5f, new Date());
+                if(!existScore(score, game)) {
+                    scoreRepository.save(score);
+                }
+                return "TIE";
+            }
+            if (allShipsSunk(selfShips, opponentSalvoes)){
+                Score score = new Score(game, selfPlayer,0, new Date());
+                if(!existScore(score, game)) {
+                    scoreRepository.save(score);
+                }
                 return "LOST";
-
             }
-
-            if(allShipsSunk(opponent.getShips(),self.getSalvoes())){
-
+            if(allShipsSunk(opponentShips, selfSalvoes)){
+                Score score = new Score(game, selfPlayer,1, new Date());
+                if(!existScore(score, game)) {
+                    scoreRepository.save(score);
+                }
                 return "WON";
             }
         }
+        if (selfSalvoes.size() != currentTurn){
+            return "PLAY";
+        }
 
-        return "NO STATE";
+        return "WAIT";
+}
+
+    private  Boolean existScore(Score score, Game game){
+        Set<Score> scores = game.getScores();
+
+        for(Score s : scores){
+            if(score.getPlayer().getEmail().equals(s.getPlayer().getEmail())){
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    private boolean allShipsSunk(Set<Ship> selfShips, Set<Salvo> opponentSalvoes){
+    private boolean allShipsSunk(Set<Ship> selfShips, Set<Salvo> opponentSalvoes) {
+        Map<String,Object> damages = getDamages(selfShips, opponentSalvoes);
 
-        List<String> opponentSalvoesLocationsList = opponentSalvoes.stream().map(salvo -> salvo.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
+        long selfSunkenShips = selfShips
+                .stream()
+                .filter(ship -> Long.parseLong(String.valueOf(damages.get(ship.getType()))) == longShip(ship))
+                .count();
+
+        return selfSunkenShips == 5;
+/*        List<String> opponentSalvoesLocationsList = opponentSalvoes.stream().map(salvo -> salvo.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
         List<String> selfShipsLocationsList = selfShips.stream().map(ship -> ship.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
 
-        int longCarrier = 0;
-        int longBattleship = 0;
-        int longDestroyer = 0;
-        int longSubmarine = 0;
-        int longPatrolBoat = 0;
 
         boolean sunk = false;
         for (Ship ship : selfShips) {
 
             int shipSize = selfShips.size();
-            for (String opponentSalvoLocation : opponentSalvoesLocationsList){
+            for (String opponentSalvoLocation : opponentSalvoesLocationsList) {
 
-                for (String selfShipLocation : selfShipsLocationsList){
+                for (String selfShipLocation : selfShipsLocationsList) {
 
-                    if (opponentSalvoLocation.equals(selfShipLocation)){
+                    if (opponentSalvoLocation.equals(selfShipLocation)) {
                         shipSize--;
-                        if (shipSize == 0){
-                            String shipType = ship.getType();
+                        if (shipSize == 0) {
                             sunk = true;
                         }
                     }
                 }
 
             }
-   /*         switch (ship.getType()) {
-                case "Carrier":
-                    longCarrier = 5;
-                    break;
-                case "Battleship":
-                    longBattleship = 4;
-                    break;
-                case "Destroyer":
-                    longDestroyer = 3;
-                    break;
-                case "Submarine":
-                    longSubmarine = 3;
-                    break;
-                case "PatrolBoat":
-                    longPatrolBoat = 2;
-                    break;
-            }*/
         }
 
-        return sunk;
+        return sunk;*/
     }
 
-    public int currentTurn(GamePlayer self, GamePlayer opponent){
+    private Map<String,Object> getDamages(Set<Ship> selfShips, Set<Salvo> oppSalvoes) {
+        Map<String, Object> dto = new LinkedHashMap<>();
 
-        List<Salvo> selfSalvoesList = self.getSalvoes().stream().collect(Collectors.toList());
-        List<Salvo> opponentSalvoesList = opponent.getSalvoes().stream().collect(Collectors.toList());
+        int carrierDamage = 0;
+        int destroyerDamage = 0;
+        int patrolboatDamage = 0;
+        int submarineDamage = 0;
+        int battleshipDamage = 0;
+        List<String> carrierLocations = new ArrayList<>();
+        List<String> destroyerLocations = new ArrayList<>();
+        List<String> submarineLocations = new ArrayList<>();
+        List<String> patrolboatLocations = new ArrayList<>();
+        List<String> battleshipLocations = new ArrayList<>();
 
-        List<Salvo> allSalvoes = new ArrayList<>();
+        for (Ship ship : selfShips) {
+            switch (ship.getType()) {
+                case "carrier":
+                    carrierLocations = ship.getLocations();
+                    break;
+                case "battleship":
+                    battleshipLocations = ship.getLocations();
+                    break;
+                case "destroyer":
+                    destroyerLocations = ship.getLocations();
+                    break;
+                case "submarine":
+                    submarineLocations = ship.getLocations();
+                    break;
+                case "patrolboat":
+                    patrolboatLocations = ship.getLocations();
+                    break;
+            }
+        }
 
-        allSalvoes.addAll(selfSalvoesList);
-        allSalvoes.addAll(opponentSalvoesList);
+        for (Salvo salvo : oppSalvoes) {
+            List<String> salvoShot = new ArrayList<>();
+            salvoShot.addAll(salvo.getLocations());
 
-        return allSalvoes.stream().mapToInt(salvo -> salvo.getTurn()).max().getAsInt();
+            for (String salvoLocation : salvoShot) {
+                if (carrierLocations.contains(salvoLocation)) {
+                    carrierDamage++;
+                }
+                if (battleshipLocations.contains(salvoLocation)) {
+                    battleshipDamage++;
+                }
+                if (submarineLocations.contains(salvoLocation)) {
+                    submarineDamage++;
+                }
+                if (destroyerLocations.contains(salvoLocation)) {
+                    destroyerDamage++;
+                }
+                if (patrolboatLocations.contains(salvoLocation)) {
+                    patrolboatDamage++;
+                }
+            }
+        }
 
+/*
+        dto.put("Carrier", carrierDamage);
+        dto.put("Battleship", battleshipDamage);
+        dto.put("Submarine", submarineDamage);
+        dto.put("Destroyer", destroyerDamage);
+        dto.put("PatrolBoat", patrolboatDamage);
+*/
+
+        dto.put("carrier", carrierDamage);
+        dto.put("battleship", battleshipDamage);
+        dto.put("submarine", submarineDamage);
+        dto.put("destroyer", destroyerDamage);
+        dto.put("patrolboat", patrolboatDamage);
+        return dto;
     }
 
+    public int longShip(Ship ship) {
+
+        int longShipType;
+
+        switch (ship.getType()) {
+            case "carrier":
+                longShipType = 5;
+                break;
+            case "battleship":
+                longShipType = 4;
+                break;
+            case "destroyer":
+                longShipType = 3;
+                break;
+            case "submarine":
+                longShipType = 3;
+                break;
+            case "patrolboat":
+                longShipType = 2;
+                break;
+            default:
+                longShipType = 0;
+        }
+
+        return longShipType;
+    }
+
+    public int currentTurnGame(GamePlayer self, GamePlayer opponent){
+
+        int selfGPSalvoes = self.getSalvoes().size();
+        int opponentGPSalvoes = opponent.getSalvoes().size();
+
+        int totalSalvoes = selfGPSalvoes + opponentGPSalvoes;
+
+        if(totalSalvoes % 2 == 0)
+            return totalSalvoes / 2 + 1;
+
+        return (int) (totalSalvoes / 2.0 + 0.5);
+    }
 
     private Map<String, Object> hitsDTO(GamePlayer self, GamePlayer opponent) {
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -282,19 +428,19 @@ public class SalvoController {
 
         for (Ship selfShip : self.getShips()) {
             switch (selfShip.getType()) {
-                case "Carrier":
+                case "carrier":
                     selfCarrierLocations = selfShip.getLocations();
                     break;
-                case "Battleship":
+                case "battleship":
                     selfBattleshipLocations = selfShip.getLocations();
                     break;
-                case "Destroyer":
+                case "destroyer":
                     selfDestroyerLocations = selfShip.getLocations();
                     break;
-                case "Submarine":
+                case "submarine":
                     selfSubmarineLocations = selfShip.getLocations();
                     break;
-                case "PatrolBoat":
+                case "patrolboat":
                     selfPatrolboatLocations = selfShip.getLocations();
                     break;
             }
@@ -353,8 +499,6 @@ public class SalvoController {
                     missedShots--;
                 }
             }
-
-            hitsMapPerTurn.put("currentTurn", currentTurn(self, opponent));
 
             hitsMapPerTurn.put("turn", opponentSalvo.getTurn());
             hitsMapPerTurn.put("hitLocations", hitCellsList);
@@ -672,12 +816,14 @@ public class SalvoController {
         }
         if (correctGamePlayer(gamePlayer, authenticatedPlayer)) {
             // Hago un filter y count para saber si el Turn no esta repetido.
-            if (gamePlayer.getSalvoes().stream().filter(s -> s.getTurn() == salvo.getTurn()).count() == 1) {
+            //gamePlayer.getSalvoes().stream().filter(s -> s.getTurn() == salvo.getTurn()).count() == 1
+            if (turnHasSalvoes(salvo, gamePlayer.getSalvoes())) {
                 return new ResponseEntity<>(responseInfo("error", "Player already has the salvo"), HttpStatus.FORBIDDEN);
 
             } else {
-                //gamePlayer.getSalvoes().stream().filter(s -> s.getTurn() == salvo.getTurn()).collect(Collectors.counting()) + 1;
-                int currentTurn = gamePlayer.getSalvoes().size() + 1;
+
+                salvo.setTurn(gamePlayer.getSalvoes().size() + 1);
+                salvo.setGamePlayer(gamePlayer);
 
                 gamePlayer.getSalvoes().add(salvo);
                 salvoRepository.save(salvo);
@@ -689,5 +835,16 @@ public class SalvoController {
             return new ResponseEntity<>(responseInfo("error", "Wrong gamePlayerID"), HttpStatus.UNAUTHORIZED);
 
         }
+    }
+
+    private boolean turnHasSalvoes(Salvo newSalvo,
+                                   Set<Salvo> playerSalvoes){
+        boolean hasSalvoes = false;
+        for (Salvo salvo: playerSalvoes) {
+            if(salvo.getTurn() == newSalvo.getTurn()){
+                hasSalvoes = true;
+            }
+        }
+        return hasSalvoes;
     }
 }

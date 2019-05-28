@@ -393,7 +393,8 @@ function makeSalvoJSON() {
         salvoPositions.push(salvo5cellID);
     }
     salvoObject = {
-        salvoLocations : salvoPositions
+        //turn : turn,
+        locations : salvoPositions
     }
 
     salvoJSON = JSON.stringify(salvoObject);

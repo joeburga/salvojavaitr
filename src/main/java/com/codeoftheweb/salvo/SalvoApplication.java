@@ -148,35 +148,35 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipLocation10.add("H6");
 
 			// Ordenado por GAMEs.
-			Ship ship1 = new Ship("Destroyer",gamePlayer1,shipLocation1);
-			Ship ship2 = new Ship("Submarine",gamePlayer1,shipLocation3);
-			Ship ship3 = new Ship("PatrolBoat",gamePlayer1,shipLocation2);
-			Ship ship4 = new Ship("Destroyer",gamePlayer2,shipLocation7);
-			Ship ship5 = new Ship("PatrolBoat",gamePlayer2,shipLocation6);
+			Ship ship1 = new Ship("destroyer",gamePlayer1,shipLocation1);
+			Ship ship2 = new Ship("submarine",gamePlayer1,shipLocation3);
+			Ship ship3 = new Ship("patrolBoat",gamePlayer1,shipLocation2);
+			Ship ship4 = new Ship("destroyer",gamePlayer2,shipLocation7);
+			Ship ship5 = new Ship("patrolBoat",gamePlayer2,shipLocation6);
 
-			Ship ship6 = new Ship("Destroyer",gamePlayer3,shipLocation7);
-			Ship ship7 = new Ship("PatrolBoat",gamePlayer3,shipLocation8);
-			Ship ship8 = new Ship("Submarine",gamePlayer4,shipLocation9);
-			Ship ship9 = new Ship("PatrolBoat",gamePlayer4,shipLocation10);
+			Ship ship6 = new Ship("destroyer",gamePlayer3,shipLocation7);
+			Ship ship7 = new Ship("patrolBoat",gamePlayer3,shipLocation8);
+			Ship ship8 = new Ship("submarine",gamePlayer4,shipLocation9);
+			Ship ship9 = new Ship("patrolBoat",gamePlayer4,shipLocation10);
 
-			Ship ship10 = new Ship("Destroyer",gamePlayer5,shipLocation7);
-			Ship ship11 = new Ship("PatrolBoat",gamePlayer5,shipLocation8);
-			Ship ship12 = new Ship("Submarine",gamePlayer6,shipLocation9);
-			Ship ship13 = new Ship("PatrolBoat",gamePlayer6,shipLocation10);
+			Ship ship10 = new Ship("destroyer",gamePlayer5,shipLocation7);
+			Ship ship11 = new Ship("patrolBoat",gamePlayer5,shipLocation8);
+			Ship ship12 = new Ship("submarine",gamePlayer6,shipLocation9);
+			Ship ship13 = new Ship("patrolBoat",gamePlayer6,shipLocation10);
 
-			Ship ship14 = new Ship("Destroyer",gamePlayer7,shipLocation7);
-			Ship ship15 = new Ship("PatrolBoat",gamePlayer7,shipLocation8);
-			Ship ship16 = new Ship("Submarine",gamePlayer8,shipLocation9);
-			Ship ship17 = new Ship("PatrolBoat",gamePlayer8,shipLocation10);
+			Ship ship14 = new Ship("destroyer",gamePlayer7,shipLocation7);
+			Ship ship15 = new Ship("patrolBoat",gamePlayer7,shipLocation8);
+			Ship ship16 = new Ship("submarine",gamePlayer8,shipLocation9);
+			Ship ship17 = new Ship("patrolBoat",gamePlayer8,shipLocation10);
 
 			// Diferente al salvo-testbed.
-			Ship ship18 = new Ship("Carrier",gamePlayer9,shipLocation5);
-			Ship ship19 = new Ship("Battleship",gamePlayer9,shipLocation4);
-			Ship ship20 = new Ship("Submarine",gamePlayer10,shipLocation1);
-			Ship ship21 = new Ship("Battleship",gamePlayer10,shipLocation4);
+			Ship ship18 = new Ship("carrier",gamePlayer9,shipLocation5);
+			Ship ship19 = new Ship("battleship",gamePlayer9,shipLocation4);
+			Ship ship20 = new Ship("submarine",gamePlayer10,shipLocation1);
+			Ship ship21 = new Ship("battleship",gamePlayer10,shipLocation4);
 
-			Ship ship22 = new Ship("Carrier",gamePlayer11,shipLocation5);
-			Ship ship23 = new Ship("Battleship",gamePlayer11,shipLocation4);
+			Ship ship22 = new Ship("carrier",gamePlayer11,shipLocation5);
+			Ship ship23 = new Ship("battleship",gamePlayer11,shipLocation4);
 
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
