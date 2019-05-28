@@ -165,31 +165,35 @@ public class SalvoController {
         if (opponent == null || opponent.getShips().size() == 0){
             return "WAITINGFOROPP";
         }
-
-        if (self.getShips().size() > 4 && opponent.getShips().size() > 4){
-            return "ENTER SALVO";
-        } else {
-            return "PLAY";
+        if (opponent.getShips().size() == 0){
+            return "WAIT";
         }
 
-/*        if (allShipsSunk(self.getShips(),opponent.getSalvoes())){
+        if (self.getSalvoes().size() == opponent.getSalvoes().size()){
 
-            if (allShipsSunk(opponent.getShips(),self.getSalvoes())){
-                return "TIE";
-            } else {
-                return "LOST";
+            if (allShipsSunk(self.getShips(),opponent.getSalvoes()) && allShipsSunk(opponent.getShips(),self.getSalvoes())){
+
+                    return "TIE";
             }
-        } else {
+            if (allShipsSunk(self.getShips(),opponent.getSalvoes())){
 
-            return "WON";
-        }*/
+                return "LOST";
 
+            }
+
+            if(allShipsSunk(opponent.getShips(),self.getSalvoes())){
+
+                return "WON";
+            }
+        }
+
+        return "NO STATE";
     }
 
-    private boolean allShipsSunk(Set<Ship> ships, Set<Salvo> salvoes){
+    private boolean allShipsSunk(Set<Ship> selfShips, Set<Salvo> opponentSalvoes){
 
-        List<String> salvoesLocationsList = salvoes.stream().map(salvo -> salvo.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
-        List<String> shipsLocationsList = ships.stream().map(ship -> ship.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
+        List<String> opponentSalvoesLocationsList = opponentSalvoes.stream().map(salvo -> salvo.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
+        List<String> selfShipsLocationsList = selfShips.stream().map(ship -> ship.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
 
         int longCarrier = 0;
         int longBattleship = 0;
@@ -197,8 +201,25 @@ public class SalvoController {
         int longSubmarine = 0;
         int longPatrolBoat = 0;
 
-        for (Ship ship : ships) {
-            switch (ship.getType()) {
+        boolean sunk = false;
+        for (Ship ship : selfShips) {
+
+            int shipSize = selfShips.size();
+            for (String opponentSalvoLocation : opponentSalvoesLocationsList){
+
+                for (String selfShipLocation : selfShipsLocationsList){
+
+                    if (opponentSalvoLocation.equals(selfShipLocation)){
+                        shipSize--;
+                        if (shipSize == 0){
+                            String shipType = ship.getType();
+                            sunk = true;
+                        }
+                    }
+                }
+
+            }
+   /*         switch (ship.getType()) {
                 case "Carrier":
                     longCarrier = 5;
                     break;
@@ -214,10 +235,10 @@ public class SalvoController {
                 case "PatrolBoat":
                     longPatrolBoat = 2;
                     break;
-            }
+            }*/
         }
 
-        return true ;
+        return sunk;
     }
 
     public int currentTurn(GamePlayer self, GamePlayer opponent){
@@ -656,6 +677,8 @@ public class SalvoController {
 
             } else {
                 //gamePlayer.getSalvoes().stream().filter(s -> s.getTurn() == salvo.getTurn()).collect(Collectors.counting()) + 1;
+                int currentTurn = gamePlayer.getSalvoes().size() + 1;
+
                 gamePlayer.getSalvoes().add(salvo);
                 salvoRepository.save(salvo);
 
