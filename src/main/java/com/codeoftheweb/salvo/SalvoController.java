@@ -119,7 +119,6 @@ public class SalvoController {
             default:
                 longShipType = 0;
         }
-
         return longShipType;
     }
 
@@ -158,7 +157,6 @@ public class SalvoController {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -196,6 +194,7 @@ public class SalvoController {
         }
         return hasSalvoes;
     }
+
 
     /* ######################## @RequestMapping - GETs - FOR DTOs ######################## */
 
@@ -264,6 +263,7 @@ public class SalvoController {
 
         return dto;
     }
+
 
     /* ######################## DTO GAMES ######################## */
 
@@ -406,6 +406,7 @@ public class SalvoController {
         return dto;
     }
 
+
     /* ######################## DTO GAME STATE ######################## */
 
     private String getGameState(GamePlayer self, GamePlayer opponent){
@@ -525,6 +526,7 @@ public class SalvoController {
         dto.put("patrolboat", patrolboatDamage);
         return dto;
     }
+
 
     /* ######################## DTO HITS ######################## */
 
@@ -763,7 +765,7 @@ public class SalvoController {
                 gamePlayer.setShips(ships);
                 shipRepository.saveAll(ships);
 
-                return new ResponseEntity<>(responseInfo("ok", "Ships saved"), HttpStatus.CREATED);
+                return new ResponseEntity<>(responseInfo("OK", "Ships Saved!!"), HttpStatus.CREATED);
 
             } else {
                 return new ResponseEntity<>(responseInfo("error", "Player already has ships"), HttpStatus.FORBIDDEN);
@@ -771,7 +773,6 @@ public class SalvoController {
 
         } else {
             return new ResponseEntity<>(responseInfo("error", "Wrong gamePlayerID"), HttpStatus.UNAUTHORIZED);
-
         }
     }
 
@@ -813,12 +814,12 @@ public class SalvoController {
                 gamePlayer.getSalvoes().add(salvo);
                 salvoRepository.save(salvo);
 
-                return new ResponseEntity<>(responseInfo("ok", "Salvoes saved"), HttpStatus.CREATED);
+                return new ResponseEntity<>(responseInfo("OK", "Salvoes Fired!!"), HttpStatus.CREATED);
             }
 
         } else {
-            return new ResponseEntity<>(responseInfo("error", "Wrong gamePlayerID"), HttpStatus.UNAUTHORIZED);
 
+            return new ResponseEntity<>(responseInfo("error", "Wrong gamePlayerID"), HttpStatus.UNAUTHORIZED);
         }
     }
 }
