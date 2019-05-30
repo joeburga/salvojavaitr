@@ -150,24 +150,24 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			// Ordenado por GAMEs.
 			Ship ship1 = new Ship("destroyer",gamePlayer1,shipLocation1);
 			Ship ship2 = new Ship("submarine",gamePlayer1,shipLocation3);
-			Ship ship3 = new Ship("patrolBoat",gamePlayer1,shipLocation2);
+			Ship ship3 = new Ship("patrolboat",gamePlayer1,shipLocation2);
 			Ship ship4 = new Ship("destroyer",gamePlayer2,shipLocation7);
-			Ship ship5 = new Ship("patrolBoat",gamePlayer2,shipLocation6);
+			Ship ship5 = new Ship("patrolboat",gamePlayer2,shipLocation6);
 
 			Ship ship6 = new Ship("destroyer",gamePlayer3,shipLocation7);
-			Ship ship7 = new Ship("patrolBoat",gamePlayer3,shipLocation8);
+			Ship ship7 = new Ship("patrolboat",gamePlayer3,shipLocation8);
 			Ship ship8 = new Ship("submarine",gamePlayer4,shipLocation9);
-			Ship ship9 = new Ship("patrolBoat",gamePlayer4,shipLocation10);
+			Ship ship9 = new Ship("patrolboat",gamePlayer4,shipLocation10);
 
 			Ship ship10 = new Ship("destroyer",gamePlayer5,shipLocation7);
-			Ship ship11 = new Ship("patrolBoat",gamePlayer5,shipLocation8);
+			Ship ship11 = new Ship("patrolboat",gamePlayer5,shipLocation8);
 			Ship ship12 = new Ship("submarine",gamePlayer6,shipLocation9);
-			Ship ship13 = new Ship("patrolBoat",gamePlayer6,shipLocation10);
+			Ship ship13 = new Ship("patrolboat",gamePlayer6,shipLocation10);
 
 			Ship ship14 = new Ship("destroyer",gamePlayer7,shipLocation7);
-			Ship ship15 = new Ship("patrolBoat",gamePlayer7,shipLocation8);
+			Ship ship15 = new Ship("patrolboat",gamePlayer7,shipLocation8);
 			Ship ship16 = new Ship("submarine",gamePlayer8,shipLocation9);
-			Ship ship17 = new Ship("patrolBoat",gamePlayer8,shipLocation10);
+			Ship ship17 = new Ship("patrolboat",gamePlayer8,shipLocation10);
 
 			// Diferente al salvo-testbed.
 			Ship ship18 = new Ship("carrier",gamePlayer9,shipLocation5);
