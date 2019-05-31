@@ -86,9 +86,12 @@ body {
 
 #loginSuccess, #logoutSuccess, #gameCreatedSuccess, #gameJoinedSuccess, #okShips, #okSalvo {
     display: none;
-    background-color:#2e8b57;
+    /*background-color:#2e8b57;*/
+    background-color: black;
+
     color: white;
     padding: 10px;
+    opacity: 0.7;
 }
 
 #gamesList {
@@ -120,19 +123,25 @@ body {
     background-image: url(../img/target.png);
     background-size: cover;
     /* background-color: #87cefa00; */
+    font-size: medium;
+    border-bottom-width: thick;
     color: white;
 }
 
 .salvoCellSelf {
     background-image: url(../img/targetself.png);
     background-size: cover;
-    /* background-color: #87cefa00; */
+    background-color: #87cefa00;
     color: #888888;
 }
-
 .hitCell {
-    background-image: url(../img/hit3.gif);
+    background-image: url(../img/venom.gif);
     background-size: cover;
+}
+.hitCellSelf {
+    background-image: url(../img/picoro.gif);
+    background-size: cover;
+    size: auto;
 }
 
 .verticalCenterFlex {
@@ -151,6 +160,19 @@ body {
     text-align: center;
 }
 
+.btn-danger {
+    background-color: #222222;
+    border-color: #222222;
+    opacity: 0.8;
+}
+
+.entergame {
+    background-color: #222222;
+}
+
+.joinGameButton {
+    font-c: white;
+}
 /*SHIP PLACEMENT*/
 
 #grid1 {
@@ -369,7 +391,8 @@ button:focus {
 
 .yellow500 {
     font-weight: 600;
-    color: #ffc107;
+    /*color: #ffc107;*/
+    color: gold;
 }
 
 #scoreBoard > tbody > tr:first-child > td {

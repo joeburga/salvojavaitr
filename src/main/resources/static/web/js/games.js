@@ -211,7 +211,7 @@ function showGamesTable(gamesData) {
 
                 if (gamesData[i].gamePlayers.length == 1 && data.player.id != null && data.player.id != gamesData[i].gamePlayers[j].player.id) {
                     $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">WAITING FOR PLAYER</td>').appendTo(row);
-                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-info" data-gameid=' + '"' + gamesData[i].id + '"' + '>JOIN GAME</button></td>';
+                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-outline-info" data-gameid=' + '"' + gamesData[i].id + '"' + '>JOIN GAME</button></td>';
 
                 }
                 if (gamesData[i].gamePlayers[j].player.id == data.player.id) {
@@ -224,7 +224,7 @@ function showGamesTable(gamesData) {
 
             if (isLoggedPlayer === true) {
                 var gameUrl = "/web/game.html?gp=" + gpid;
-                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-warning" role="button">ENTER GAME</a></td>').appendTo(row);
+                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="entergame btn btn-outline-danger" role="button">ENTER GAME</a></td>').appendTo(row);
             } else if (joinButtonHtml !== null){
                 $(joinButtonHtml).appendTo(row);
             } else {

@@ -251,15 +251,33 @@ public class SalvoController {
     private Map<String, Object> gameViewDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<>();
 
+        GamePlayer opponent = getOpponent(gamePlayer);
+
         dto.put("id", gamePlayer.getGame().getId());
         dto.put("created", gamePlayer.getGame().getDate());
         // Estoy en GamePlayer, invoco a getGame() para obtener el Game y traerme los GamePlayers.
         dto.put("gamePlayers", makeGamePlayersList(gamePlayer.getGame().getGamePlayers()));
-        dto.put("ships", makeShipsList(gamePlayer.getShips()));
-        dto.put("salvoes", makeGamesSalvoesList(gamePlayer.getGame()));
+
+        if (gamePlayer.getShips().isEmpty()){
+            dto.put("ships", new ArrayList<>());
+        } else {
+            dto.put("ships", makeShipsList(gamePlayer.getShips()));
+        }
+        if (gamePlayer.getSalvoes().isEmpty()){
+            dto.put("salvoes", new ArrayList<>());
+        } else {
+            dto.put("salvoes", makeGamesSalvoesList(gamePlayer.getGame()));
+        }
+
         dto.put("scores", makeGamesScoresList(gamePlayer.getGame().getScores()));
         dto.put("gameState", getGameState(gamePlayer,getOpponent(gamePlayer)));
-        dto.put("hits", hitsDTO(gamePlayer, getOpponent(gamePlayer)));
+
+        if (opponent==null){
+            dto.put("hits", emptyHitsDTO());
+
+        } else {
+            dto.put("hits", hitsDTO(gamePlayer, getOpponent(gamePlayer)));
+        }
 
         return dto;
     }
@@ -529,6 +547,15 @@ public class SalvoController {
 
 
     /* ######################## DTO HITS ######################## */
+
+    private Map<String, Object> emptyHitsDTO() {
+        Map<String, Object> dto = new LinkedHashMap<>();
+
+        dto.put("self", new ArrayList<>());
+        dto.put("opponent", new ArrayList<>());
+
+        return dto;
+    }
 
     private Map<String, Object> hitsDTO(GamePlayer self, GamePlayer opponent) {
         Map<String, Object> dto = new LinkedHashMap<>();
