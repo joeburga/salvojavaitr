@@ -1,5 +1,5 @@
 body {
-    background: url(../img/warship.jpg);
+    background: url(../img/warhd.jpg);
     font-family: 'Dosis', sans-serif;
     background-size: 100%;
 
@@ -86,7 +86,7 @@ body {
 
 #loginSuccess, #logoutSuccess, #gameCreatedSuccess, #gameJoinedSuccess, #okShips, #okSalvo {
     display: none;
-    background-color: forestgreen;
+    background-color:#2e8b57;
     color: white;
     padding: 10px;
 }
@@ -381,6 +381,7 @@ button:focus {
 }
 
 #loginBlock {
+
     margin-top: 10px;
 }
 
