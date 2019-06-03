@@ -22,10 +22,10 @@ public class GamePlayer {
     private Game game;
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
-    private Set<Ship> ships;
+    private Set<Ship> ships = new HashSet<>();
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
-    private Set<Salvo> salvoes;
+    private Set<Salvo> salvoes = new HashSet<>();
 
     public GamePlayer() { }
 

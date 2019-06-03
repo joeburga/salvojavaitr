@@ -87,7 +87,7 @@ public class SalvoController {
         return gamePlayer.getGame().getGamePlayers().stream()
                 .filter(gp -> gp != gamePlayer)
                 .findFirst()
-                .orElse(null);
+                .orElse(new GamePlayer());
     }
 
     /**
@@ -227,11 +227,11 @@ public class SalvoController {
         }
         if (!correctGamePlayer(gamePlayer, authenticatedPlayer)) {
             return new ResponseEntity<>(responseInfo("error", "Wrong gamePlayerID"), HttpStatus.UNAUTHORIZED);
-        }
+        }/*
         if (gamePlayer.getGame().getGamePlayers().size() == 1) {
             return new ResponseEntity<>(responseInfo("error", "Waiting for next player, go back homePage!!"), HttpStatus.UNAUTHORIZED);
         }
-
+*/
         dto = gameViewDTO(gamePlayer);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
