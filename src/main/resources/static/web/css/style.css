@@ -135,11 +135,11 @@ body {
     color: #888888;
 }
 .hitCell {
-    background-image: url(../img/venom.gif);
+    background-image: url(../img/Crash-Burn.gif);
     background-size: cover;
 }
 .hitCellSelf {
-    background-image: url(../img/picoro.gif);
+    background-image: url(../img/piccolo.gif);
     background-size: cover;
     size: auto;
 }
@@ -373,6 +373,10 @@ button:focus {
 #login-form {
     justify-content: flex-end;
     color: white;
+    /*username y password cambio estilo*/
+    font-weight: bold;
+    text-shadow:3px 3px black;
+
 }
 
 #username, #password {
@@ -382,6 +386,15 @@ button:focus {
 .whiteColor {
     color: white;
     margin-top: 10px;
+
+    /*GAME LIST estilo*/
+    font-family: "Times New Roman", Times, serif;
+    text-shadow:3px 3px black;
+}
+
+/* Para que no me muestre la tabla de Scores. */
+#showLeaderBoard{
+    display: none;
 }
 
 .table th {
@@ -410,11 +423,20 @@ button:focus {
 
 .currentPlayerContainer {
     text-align: center;
+    color: white;
+
+    /*CURRENT PLAYER estilo*/
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+    text-shadow:3px 3px black;
+
 }
 
 #currentPlayer {
+    font-family: "Times New Roman", Times, serif;
     font-size: 1.2em;
     font-weight: 600;
+    color: white;
 }
 
 .placeshipsInstructions {

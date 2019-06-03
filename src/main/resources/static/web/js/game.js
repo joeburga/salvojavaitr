@@ -65,9 +65,29 @@ function refreshGameView(_url) {
             // createTable(player1);
             // createTable(player2);
 
+                var ret = ' ' + gamePlayerData.gameState + ' ';
+
+                if(data.gameState == "PLAY"){
+                    ret += '<i class="fas fa-gamepad fa-lg"></i>';
+                }
+                if(data.gameState == "WAIT OPPONENT SHIPS" || data.gameState == "WAITING FOR OPPONENT SALVO"){
+                    ret += '<i class="fas fa-spinner fa-pulse"></i>';
+                }
+                if(data.gameState == "LOST"){
+                    ret = '<i class="fas fa-skull-crossbones fa-lg"></i>' + ' ' + ret + '<i class="fas fa-skull-crossbones fa-lg"></i>';
+                }
+                if(data.gameState == "WON"){
+                    ret += '<i class="fas fa-trophy fa-lg"></i>' + ' ' + '<i class="fas fa-trophy fa-lg"></i>' + ' ' + '<i class="fas fa-trophy fa-lg"></i>' ;
+                }
+                if (gamePlayerData.gameState === "PLACE YOUR SHIPS"){
+                     ret = '<i class="fas fa-user-secret fa-2x"></i>' + ' ' + ret + '<i class="fas fa-user-secret fa-2x"></i>';
+                }
+                if (gamePlayerData.gameState === "TIE"){
+                    ret += '<i class="fas fa-glass-cheers fa-lg"></i>';
+                }
 
 
-            $('#gameStateBlock').html('<span class="gameStateLabel">TURN: </span><span class="gameStateLabelBig">' + getTurn(gamePlayerData) + '</span><span class="gameStateLabel"> ACTION REQUIRED: </span><span class="gameStateLabelBig">' + gamePlayerData.gameState + '</span>');
+            $('#gameStateBlock').html('<span class="gameStateLabel">TURN: </span><span class="gameStateLabelBig">' + getTurn(gamePlayerData) +  '</span><span class="gameStateLabel"> ACTION REQUIRED: </span><span class="gameStateLabelBig"> ' + ' ' + ret + ' </span> ');
 
             console.log("waitState: " + waitState);
 
@@ -77,11 +97,21 @@ function refreshGameView(_url) {
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
             }
 
-            if (gamePlayerData.gameState === "PLACESHIPS"){
+            if (gamePlayerData.gameState === "PLACE YOUR SHIPS"){
                 $('#placingShipsBoard').show('puff', 'slow');
             }
-            if (gamePlayerData.gameState === "WAITINGFOROPP"){
+            if (gamePlayerData.gameState === "WAITING FOR OPPONENT SALVO"){
                 $('#battleGrids').show('puff', 'slow');
+                $('#salvoBlock').hide('puff', 'slow');
+                $('#gameRecordBlock').show('puff', 'slow');
+                waitState = true;
+                setTimeout(
+                    function()
+                    {
+                        refreshGameView(makeUrl());
+                        console.log("...refreshing gameview...");
+
+                    }, 5000);
             }
 
             if (gamePlayerData.gameState === "WON"){
@@ -108,7 +138,7 @@ function refreshGameView(_url) {
                 $('#gameRecordBlock').show('puff', 'slow');
                 console.log("OH YOU LOST");
             }
-            if (gamePlayerData.gameState === "WAIT"){
+            if (gamePlayerData.gameState === "WAIT OPPONENT SHIPS"){
                 $('#battleGrids').show('puff', 'slow');
                 $('#salvoBlock').hide('puff', 'slow');
                 $('#gameRecordBlock').show('puff', 'slow');
@@ -132,7 +162,7 @@ function refreshGameView(_url) {
                     '                <div class="droppable salvoCharger caught--it" id="salvoout3"><div class="draggable" id="salvo3"></div></div>\n' +
                     '                <div class="droppable salvoCharger caught--it" id="salvoout4"><div class="draggable" id="salvo4"></div></div>\n' +
                     '                <div class="droppable salvoCharger caught--it" id="salvoout5"><div class="draggable" id="salvo5"></div></div>\n' +
-                    '                <div class="textCenter"><button class="btn btn-warning" id="postSalvo">Fire Salvo!</button></div>\n' +
+                    '                <div class="textCenter"><button class="btn btn-outline-danger" id="postSalvo">FIRE SALVO!!</button></div>\n' +
                     '            </div>');
 
                 resetSalvoCellIds();
@@ -140,9 +170,9 @@ function refreshGameView(_url) {
                 $('#postSalvo').click(function () {
                     makeSalvoJSON();
                     if (salvoPositions.length === 0){
-                        $('#errorSalvo').text("Error! No salvos to fire! You must set at least one target!");
+                        $('#errorSalvo').text("Error! No salvoes to fire! You must set at least one target!");
                         $('#errorSalvo').show( "slow" ).delay(3000).hide( "slow" );
-                        console.log("No salvos to shoot!");
+                        console.log("No salvoes to shoot!");
                     } else {
                         postSalvo(makePostUrlSalvoes());
                     }
@@ -356,7 +386,7 @@ function postSalvo (postUrl) {
 }
 
 function displayOverlay(text) {
-    $("<table id='overlay'><tbody><tr><td>" + text + "<br><button class='btn btn-info' onclick='removeOverlay()'>Ok! I got it.</button> </td></tr></tbody></table>").css({
+    $("<table id='overlay'><tbody><tr><td>" + text + "<br><button class='btn btn-info' onclick='removeOverlay()'> OK!! I GOT IT NOW...</button> </td></tr></tbody></table>").css({
         "position": "absolute",
         "top": "0px",
         // "left": "0px",
@@ -367,7 +397,11 @@ function displayOverlay(text) {
         "vertical-align": "middle",
         "text-align": "center",
         "color": "#fff",
+        "opacity": "0.9",
         "font-size": "35px"
+/*
+        "transform": "translate(0px,10px)"
+*/
 
     }).appendTo(".gridShips").effect( "bounce", { times: 5 }, { distance: 20 }, "slow" );
 }

@@ -98,7 +98,7 @@ function rotate(ship) {
         $('.movingMsgBig').html(ship + "<br>rotated to<br> horizontal!");
 		console.log("x: " + currentX + " y: " + currentY + " w: " + currentHeight + " h: " + currentWidth);
 	} else {
-        var msg = "Illegal position. Collision or out of board!";
+        var msg = "<br>ILLEGAL POSITION !!!<br> COLLISION OR OUT OF BOARD !!";
 		displayOverlay(msg);
 		console.log("Illegal position. Collision or Out of board.");
 	}

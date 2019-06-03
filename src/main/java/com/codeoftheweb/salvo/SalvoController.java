@@ -129,14 +129,14 @@ public class SalvoController {
      * @param opponent
      * @return int
      */
-    private int currentTurnGame(GamePlayer self, GamePlayer opponent){
+    private int currentTurnGame(GamePlayer self, GamePlayer opponent) {
 
         int selfGPSalvoes = self.getSalvoes().size();
         int opponentGPSalvoes = opponent.getSalvoes().size();
 
         int totalSalvoes = selfGPSalvoes + opponentGPSalvoes;
 
-        if(totalSalvoes % 2 == 0)
+        if (totalSalvoes % 2 == 0)
             return totalSalvoes / 2 + 1;
 
         return (int) (totalSalvoes / 2.0 + 0.5);
@@ -149,11 +149,11 @@ public class SalvoController {
      * @param game
      * @return boolean
      */
-    private boolean existScore(Score score, Game game){
+    private boolean existScore(Score score, Game game) {
         Set<Score> scores = game.getScores();
 
-        for(Score s : scores){
-            if(score.getPlayer().getEmail().equals(s.getPlayer().getEmail())){
+        for (Score s : scores) {
+            if (score.getPlayer().getEmail().equals(s.getPlayer().getEmail())) {
                 return true;
             }
         }
@@ -168,7 +168,7 @@ public class SalvoController {
      * @return boolean
      */
     private boolean allShipsSunk(Set<Ship> selfShips, Set<Salvo> opponentSalvoes) {
-        Map<String,Object> damages = getDamages(selfShips, opponentSalvoes);
+        Map<String, Object> damages = getDamages(selfShips, opponentSalvoes);
 
         long selfSunkenShips = selfShips
                 .stream()
@@ -185,10 +185,10 @@ public class SalvoController {
      * @param playerSalvoes
      * @return boolean
      */
-    private boolean turnHasSalvoes(Salvo newSalvo, Set<Salvo> playerSalvoes){
+    private boolean turnHasSalvoes(Salvo newSalvo, Set<Salvo> playerSalvoes) {
         boolean hasSalvoes = false;
-        for (Salvo salvo: playerSalvoes) {
-            if(salvo.getTurn() == newSalvo.getTurn()){
+        for (Salvo salvo : playerSalvoes) {
+            if (salvo.getTurn() == newSalvo.getTurn()) {
                 hasSalvoes = true;
             }
         }
@@ -258,21 +258,21 @@ public class SalvoController {
         // Estoy en GamePlayer, invoco a getGame() para obtener el Game y traerme los GamePlayers.
         dto.put("gamePlayers", makeGamePlayersList(gamePlayer.getGame().getGamePlayers()));
 
-        if (gamePlayer.getShips().isEmpty()){
+        if (gamePlayer.getShips().isEmpty()) {
             dto.put("ships", new ArrayList<>());
         } else {
             dto.put("ships", makeShipsList(gamePlayer.getShips()));
         }
-        if (gamePlayer.getSalvoes().isEmpty()){
+        if (gamePlayer.getSalvoes().isEmpty()) {
             dto.put("salvoes", new ArrayList<>());
         } else {
             dto.put("salvoes", makeGamesSalvoesList(gamePlayer.getGame()));
         }
 
         dto.put("scores", makeGamesScoresList(gamePlayer.getGame().getScores()));
-        dto.put("gameState", getGameState(gamePlayer,getOpponent(gamePlayer)));
+        dto.put("gameState", getGameState(gamePlayer, getOpponent(gamePlayer)));
 
-        if (opponent==null){
+        if (opponent == null) {
             dto.put("hits", emptyHitsDTO());
 
         } else {
@@ -427,7 +427,7 @@ public class SalvoController {
 
     /* ######################## DTO GAME STATE ######################## */
 
-    private String getGameState(GamePlayer self, GamePlayer opponent){
+    private String getGameState(GamePlayer self, GamePlayer opponent) {
 
         Set<Ship> selfShips = self.getShips();
         Set<Salvo> selfSalvoes = self.getSalvoes();
@@ -435,52 +435,52 @@ public class SalvoController {
         Set<Ship> opponentShips = opponent.getShips();
         Set<Salvo> opponentSalvoes = opponent.getSalvoes();
 
-        if (selfShips.size() == 0){
-            return "PLACESHIPS";
+        if (selfShips.size() == 0) {
+            return "PLACE YOUR SHIPS";
         }
-        if (opponentShips == null){
-            return "WAITINGFOROPP";
+        if (opponentShips == null) {
+            return "WAITING FOR OPPONENT SALVO";
         }
-        if (opponentShips.size() == 0){
-            return "WAIT";
+        if (opponentShips.size() == 0) {
+            return "WAIT OPPONENT SHIPS";
         }
-        if(selfSalvoes.size() == opponentSalvoes.size()){
+        if (selfSalvoes.size() == opponentSalvoes.size()) {
             Player selfPlayer = self.getPlayer();
             Game game = self.getGame();
-            if (allShipsSunk(selfShips, opponentSalvoes) && allShipsSunk(opponentShips, selfSalvoes)){
-                Score score = new Score(game,selfPlayer, 0.5f, new Date());
-                if(!existScore(score, game)) {
+            if (allShipsSunk(selfShips, opponentSalvoes) && allShipsSunk(opponentShips, selfSalvoes)) {
+                Score score = new Score(game, selfPlayer, 0.5f, new Date());
+                if (!existScore(score, game)) {
                     scoreRepository.save(score);
                 }
                 return "TIE";
             }
-            if (allShipsSunk(selfShips, opponentSalvoes)){
-                Score score = new Score(game, selfPlayer,0, new Date());
-                if(!existScore(score, game)) {
+            if (allShipsSunk(selfShips, opponentSalvoes)) {
+                Score score = new Score(game, selfPlayer, 0, new Date());
+                if (!existScore(score, game)) {
                     scoreRepository.save(score);
                 }
                 return "LOST";
             }
-            if(allShipsSunk(opponentShips, selfSalvoes)){
-                Score score = new Score(game, selfPlayer,1, new Date());
-                if(!existScore(score, game)) {
+            if (allShipsSunk(opponentShips, selfSalvoes)) {
+                Score score = new Score(game, selfPlayer, 1, new Date());
+                if (!existScore(score, game)) {
                     scoreRepository.save(score);
                 }
                 return "WON";
             }
         }
 
-        int currentTurn = currentTurnGame(self,opponent);
+        int currentTurn = currentTurnGame(self, opponent);
 
-        if (selfSalvoes.size() != currentTurn){
+        if (selfSalvoes.size() != currentTurn) {
             return "PLAY";
         }
 
-        return "WAIT";
+        return "WAITING FOR OPPONENT SALVO";
     }
 
 
-    private Map<String,Object> getDamages(Set<Ship> selfShips, Set<Salvo> oppSalvoes) {
+    private Map<String, Object> getDamages(Set<Ship> selfShips, Set<Salvo> oppSalvoes) {
         Map<String, Object> dto = new LinkedHashMap<>();
 
         int carrierDamage = 0;
@@ -718,17 +718,17 @@ public class SalvoController {
 
         if (authenticatedPlayer == null) {
             return new ResponseEntity<>(responseInfo("error", "You need to be logged first"), HttpStatus.FORBIDDEN);
-        } else {
-
-            Date date = Date.from(java.time.ZonedDateTime.now().toInstant());
-            Game newGame = new Game(date);
-            gameRepository.save(newGame);
-
-            GamePlayer newGamePlayer = new GamePlayer(newGame, authenticatedPlayer);
-            gamePlayerRepository.save(newGamePlayer);
-
-            return new ResponseEntity<>(responseInfo("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
         }
+
+        Date date = Date.from(java.time.ZonedDateTime.now().toInstant());
+        Game newGame = new Game(date);
+        gameRepository.save(newGame);
+
+        GamePlayer newGamePlayer = new GamePlayer(newGame, authenticatedPlayer);
+        gamePlayerRepository.save(newGamePlayer);
+
+        return new ResponseEntity<>(responseInfo("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
+
     }
 
     @RequestMapping(path = "/game/{nn}/players", method = RequestMethod.POST)
