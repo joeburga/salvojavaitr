@@ -687,9 +687,12 @@ public class SalvoController {
 
         // 1.- Si los campos del sign up estan vacios, envio respuesta FORBIDDEN.
         // 2.- Si ya hay un Player con el mismo email, envio respuesta FORBIDDEN.
-        // 3.- Creo un newPlayer con el userName, email y password.
+        // 3.- Si longitud email menor a 30 caracteres.
+        //     Creo un newPlayer con el userName, email y password.
         //     Guardo newPlayer en su respectivo repositorio.
         //     Envio respuesta CREATED.
+        // 4.- Si longitud email mayor a 30 caracteres envio respuesta FORBIDDEN.
+
 
         if (userName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>(responseInfo("error", "Missing data"), HttpStatus.FORBIDDEN);
@@ -697,11 +700,15 @@ public class SalvoController {
         if (playerRepository.findByEmail(email) != null) {
             return new ResponseEntity<>(responseInfo("error", "Name already in use"), HttpStatus.FORBIDDEN);
         }
+        if (email.length() <= 30){
+            Player newPlayer = new Player(userName, email, passwordEncoder.encode(password));
+            playerRepository.save(newPlayer);
 
-        Player newPlayer = new Player(userName, email, passwordEncoder.encode(password));
-        playerRepository.save(newPlayer);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(responseInfo("error", "Please, type an email with a maximum of 30 characters"), HttpStatus.FORBIDDEN);
+        }
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 
